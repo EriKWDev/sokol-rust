@@ -1,0 +1,13 @@
+[package]
+name = "sokol"
+version = "0.1.0"
+edition = "2021"
+authors = ["Erik W. Gren <ErikWDev@gmail.com>"]
+build = "build.rs"
+
+[[example]]
+name = "clear"
+path = "examples/clear.rs"
+
+[build-dependencies]
+cc = { version = "1.0", features = ["parallel"] }
