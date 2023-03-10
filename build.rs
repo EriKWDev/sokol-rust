@@ -200,7 +200,7 @@ fn make_sokol() {
         println!("cargo:rustc-link-lib=dylib=GL");
     }
 
-    build.compile("sokol");
+    build.compile("sokol-rust");
 }
 
 fn main() {
