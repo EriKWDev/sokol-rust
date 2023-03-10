@@ -1,54 +1,97 @@
-fn select_sokol_gfx_renderer(build: &mut cc::Build, is_msvc: bool, is_impl: bool) {
-    //
-    // select sokol_gfx renderer, defaults to:
-    // - Windows: D3D11 with MSVC, GLCORE33 otherwise
-    // - MacOS: Metal
-    // - Linux: GLCORE33
-    //
-    if cfg!(target_os = "windows") && is_msvc {
-        build.flag("-DSOKOL_D3D11");
-    } else if cfg!(target_os = "macos") {
-        build.flag("-DSOKOL_METAL");
-    } else {
-        build.flag("-DSOKOL_GLCORE33");
-    }
-
-    if is_impl {
-        if cfg!(target_os = "windows") && is_msvc {
-            println!("cargo:rustc-cfg=gfx=\"d3d11\"");
-        } else if cfg!(target_os = "macos") {
-            println!("cargo:rustc-cfg=gfx=\"metal\"");
-        } else {
-            println!("cargo:rustc-cfg=gfx=\"glcore33\"");
-        }
-    }
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum SokolBackend {
+    D3d11,
+    Metal,
+    Gl,
+    Gles2,
+    Gles3,
+    Wgpu,
 }
 
 fn make_sokol() {
     let mut build = cc::Build::new();
     let tool = build.try_get_compiler().unwrap();
 
-    let is_debug = std::env::var("DEBUG").ok().is_some();
+    let debug_info_requested = std::env::var("DEBUG").ok().is_some();
     let is_msvc = tool.is_like_msvc();
+    const BASE_C_DIR: &str = "src/sokol/c/";
+
+    let is_debug_build = cfg!(debug_assertions);
+    if !is_debug_build {
+        build.define("NDEBUG", None);
+        build.opt_level(2);
+    }
+
+    let desired_backend = std::env::var("SOKOL_BACKEND")
+        .ok()
+        .unwrap_or("AUTO".to_owned());
+
+    let wayland_desired = std::env::var("SOKOL_WAYLAND").is_ok();
+    let force_egl = std::env::var("SOKOL_FORCE_EGL").is_ok();
+
+    let backend = match &desired_backend[..] {
+        "AUTO" => {
+            if cfg!(target_os = "windows") && is_msvc {
+                SokolBackend::D3d11
+            } else if cfg!(target_os = "macos") || cfg!(target_os = "ios") {
+                SokolBackend::Metal
+            } else {
+                SokolBackend::Gl
+            }
+        }
+
+        _ => panic!("Unknown SOKOL_BACKEND: {desired_backend}"),
+    };
+
+    match backend {
+        SokolBackend::D3d11 => {
+            build.define("SOKOL_D3D11", None);
+        }
+        SokolBackend::Metal => {
+            build.define("SOKOL_METAL", None);
+        }
+        SokolBackend::Gles3 => {
+            build.define("SOKOL_GLES3", None);
+        }
+        SokolBackend::Gles2 => {
+            build.define("SOKOL_GLES2", None);
+        }
+        SokolBackend::Gl => {
+            build.define("SOKOL_GLCORE33", None);
+        }
+        SokolBackend::Wgpu => {
+            build.define("SOKOL_WGPU", None);
+        }
+    }
 
     let files = [
-        "src/sokol/c/sokol_log.c",
-        "src/sokol/c/sokol_app.c",
-        "src/sokol/c/sokol_gfx.c",
-        "src/sokol/c/sokol_glue.c",
-        "src/sokol/c/sokol_time.c",
-        "src/sokol/c/sokol_audio.c",
-        "src/sokol/c/sokol_gl.c",
-        "src/sokol/c/sokol_debugtext.c",
-        "src/sokol/c/sokol_shape.c",
+        "sokol_log.c",
+        "sokol_app.c",
+        "sokol_gfx.c",
+        "sokol_glue.c",
+        "sokol_time.c",
+        "sokol_audio.c",
+        "sokol_gl.c",
+        "sokol_debugtext.c",
+        "sokol_shape.c",
     ];
 
     //
     // include paths
     //
-    build.include("src/sokol/c/");
+    build.include(BASE_C_DIR);
+
+    build.define("IMPL", None);
+
+    //
+    // silence some warnings
+    //
+    build.flag_if_supported("-Wno-unused-parameter");
+    build.flag_if_supported("-Wno-missing-field-initializers");
 
     for file in &files {
+        let file = format!("{BASE_C_DIR}{file}");
+
         println!("cargo:rerun-if-changed={}", file);
 
         //
@@ -61,35 +104,36 @@ fn make_sokol() {
     }
 
     //
-    // select sokol_gfx renderer
-    //
-    select_sokol_gfx_renderer(&mut build, is_msvc, true);
-
-    //
-    // silence some warnings
-    //
-    build.flag_if_supported("-Wno-unused-parameter");
-
-    //
     // x86_64-pc-windows-gnu: additional compile/link flags
     //
     if cfg!(target_os = "windows") {
         if !is_msvc {
+            build.define("_WIN32_WINNIT", Some("0x0601"));
+
             build
                 .flag("-D_WIN32_WINNT=0x0601")
                 .flag_if_supported("-Wno-cast-function-type")
                 .flag_if_supported("-Wno-sign-compare")
                 .flag_if_supported("-Wno-unknown-pragmas");
 
+            println!("cargo:rustc-link-lib=static=kernel32");
+            println!("cargo:rustc-link-lib=static=user32");
             println!("cargo:rustc-link-lib=static=gdi32");
             println!("cargo:rustc-link-lib=static=ole32");
+
+            if backend == SokolBackend::D3d11 {
+                println!("cargo:rustc-link-lib=static=d3d11");
+                println!("cargo:rustc-link-lib=static=dxgi");
+            }
+
+            // TODO: Something else needed here..?
         }
     }
-    if is_debug {
-        build.flag("-D_DEBUG").flag("-DSOKOL_DEBUG");
+
+    if debug_info_requested {
+        build.define("_DEBUG", None).define("SOKOL_DEBUG", None);
     }
 
-    build.compile("sokol-rust");
     println!("cargo:rustc-link-lib=static=sokol-rust");
     println!("cargo:rustc-link-search=src/sokol/c/");
     println!("cargo:rustc-link-search=target/debug/");
@@ -100,19 +144,63 @@ fn make_sokol() {
     if cfg!(target_os = "macos") {
         println!("cargo:rustc-link-lib=framework=Cocoa");
         println!("cargo:rustc-link-lib=framework=QuartzCore");
-        println!("cargo:rustc-link-lib=framework=Metal");
-        println!("cargo:rustc-link-lib=framework=MetalKit");
         println!("cargo:rustc-link-lib=framework=Audiocc::Toolbox");
+
+        if backend == SokolBackend::Metal {
+            println!("cargo:rustc-link-lib=framework=Metal");
+            println!("cargo:rustc-link-lib=framework=MetalKit");
+        } else if backend == SokolBackend::Gl
+            || backend == SokolBackend::Gles2
+            || backend == SokolBackend::Gles3
+        {
+            println!("cargo:rustc-link-lib=framework=OpenGL");
+        } else {
+            todo!("Handle WGPU backend on macos")
+        }
     }
 
     //
     // Linux: libs
     //
     if cfg!(target_os = "linux") {
-        println!("cargo:rustc-link-lib=dylib=GL");
-        println!("cargo:rustc-link-lib=dylib=X11");
+        if force_egl {
+            build.define("SOKOL_FORCE_EGL", None);
+        }
+
+        if wayland_desired {
+            build.define("SOKOL_DISABLE_X11 ", None);
+        } else {
+            build.define("SOKOL_DISABLE_WAYLAND", None);
+        }
+
         println!("cargo:rustc-link-lib=dylib=asound");
+
+        if backend == SokolBackend::Gles2 {
+            println!("cargo:rustc-link-lib=dylib=glesv2");
+            assert!(force_egl || wayland_desired);
+        } else {
+            println!("cargo:rustc-link-lib=dylib=GL");
+        }
+
+        if force_egl || wayland_desired {
+            println!("cargo:rustc-link-lib=dylib=egl");
+        }
+
+        if wayland_desired {
+            println!("cargo:rustc-link-lib=dylib=wayland-client");
+            println!("cargo:rustc-link-lib=dylib=wayland-cursor");
+            println!("cargo:rustc-link-lib=dylib=wayland-egl");
+            println!("cargo:rustc-link-lib=dylib=xkbcommon");
+        } else {
+            println!("cargo:rustc-link-lib=dylib=X11");
+            println!("cargo:rustc-link-lib=dylib=Xi");
+            println!("cargo:rustc-link-lib=dylib=Xcursor");
+        }
+
+        println!("cargo:rustc-link-lib=dylib=GL");
     }
+
+    build.compile("sokol");
 }
 
 fn main() {

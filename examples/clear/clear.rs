@@ -52,7 +52,7 @@ extern "C" fn init() {
         }
     }
 
-    println!("Specificallym the {:?} backend!", backend);
+    println!("Specifically the {:?} backend!", backend);
 }
 
 extern "C" fn frame() {
@@ -73,10 +73,22 @@ extern "C" fn cleanup() {
 }
 
 fn main() {
+    let title = std::ffi::CString::new("clear").unwrap();
+
     sokol::app::run(&sokol::app::Desc {
         init_cb: Some(init),
         cleanup_cb: Some(cleanup),
         frame_cb: Some(frame),
+
+        width: 800,
+        height: 600,
+        sample_count: 4,
+        window_title: title.as_ptr(),
+
+        icon: sokol::app::IconDesc {
+            sokol_default: true,
+            ..Default::default()
+        },
 
         ..Default::default()
     });
