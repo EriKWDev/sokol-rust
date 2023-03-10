@@ -30,29 +30,29 @@ extern "C" fn init() {
     let backend = sokol::gfx::query_backend();
     match &backend {
         sokol::gfx::Backend::Glcore33 | sokol::gfx::Backend::Gles2 | sokol::gfx::Backend::Gles3 => {
-            println!("Using GL Backend!")
+            println!("Using GL Backend!");
+            println!("Specifically the {:?} backend!", backend);
         }
 
         sokol::gfx::Backend::D3d11 => {
-            println!("Using D3d11 Backend!")
+            println!("Using D3d11 Backend!");
         }
 
         sokol::gfx::Backend::MetalIos
         | sokol::gfx::Backend::MetalMacos
         | sokol::gfx::Backend::MetalSimulator => {
-            println!("Using Metal Backend!")
+            println!("Using Metal Backend!");
+            println!("Specifically the {:?} backend!", backend);
         }
 
         sokol::gfx::Backend::Wgpu => {
-            println!("Using Wgpu Backend!")
+            println!("Using Wgpu Backend!");
         }
 
         sokol::gfx::Backend::Dummy => {
-            println!("Using Dymmy Backend!")
+            println!("Using Dymmy Backend!");
         }
     }
-
-    println!("Specifically the {:?} backend!", backend);
 }
 
 extern "C" fn frame() {
@@ -73,17 +73,18 @@ extern "C" fn cleanup() {
 }
 
 fn main() {
-    let title = std::ffi::CString::new("clear").unwrap();
+    let window_title = b"clear\0".as_ptr() as _;
 
     sokol::app::run(&sokol::app::Desc {
         init_cb: Some(init),
         cleanup_cb: Some(cleanup),
         frame_cb: Some(frame),
 
+        window_title,
+
         width: 800,
         height: 600,
         sample_count: 4,
-        window_title: title.as_ptr(),
 
         icon: sokol::app::IconDesc {
             sokol_default: true,

@@ -759,7 +759,7 @@ def prepare():
     if not os.path.isdir("sokol-rust/src/sokol/c"):
         os.makedirs("sokol-rust/src/sokol/c")
     with open("sokol-rust/src/lib.rs", "w", newline="\n") as f_outp:
-        f_outp.write("/// Automatically generated sokol bindings for Rust\n")
+        f_outp.write("//! Automatically generated sokol bindings for Rust\n\n")
 
 def gen(c_header_path, c_prefix, dep_c_prefixes):
     if c_prefix not in module_names:

@@ -10,8 +10,8 @@ name = "clear"
 path = "examples/clear/clear.rs"
 
 [[example]]
-name = "cube"
-path = "examples/cube/cube.rs"
+name = "userdata"
+path = "examples/userdata/userdata.rs"
 
 [build-dependencies]
 cc = { version = "1.0", features = ["parallel"] }

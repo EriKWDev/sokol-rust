@@ -2,12 +2,13 @@
 
 #![allow(dead_code)]
 
-
 /// helper function to convert a C string to a rust string slice
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
+    c_str
+        .to_str()
+        .expect("c_char_ptr contained invalid Utf8 Data")
 }
 
 pub const SAPP_MAX_TOUCHPOINTS: usize = 8;
@@ -492,7 +493,17 @@ impl Default for LogItem {
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct Logger {
-    pub func: Option<extern "C" fn(*const core::ffi::c_char, u32, u32, *const core::ffi::c_char, u32, *const core::ffi::c_char, *mut core::ffi::c_void)>,
+    pub func: Option<
+        extern "C" fn(
+            *const core::ffi::c_char,
+            u32,
+            u32,
+            *const core::ffi::c_char,
+            u32,
+            *const core::ffi::c_char,
+            *mut core::ffi::c_void,
+        ),
+    >,
     pub user_data: *mut core::ffi::c_void,
 }
 impl Logger {
@@ -754,144 +765,88 @@ pub mod ffi {
     }
 }
 pub fn isvalid() -> bool {
-    unsafe {
-        ffi::sapp_isvalid()
-    }
+    unsafe { ffi::sapp_isvalid() }
 }
 pub fn width() -> i32 {
-    unsafe {
-        ffi::sapp_width()
-    }
+    unsafe { ffi::sapp_width() }
 }
 pub fn widthf() -> f32 {
-    unsafe {
-        ffi::sapp_widthf()
-    }
+    unsafe { ffi::sapp_widthf() }
 }
 pub fn height() -> i32 {
-    unsafe {
-        ffi::sapp_height()
-    }
+    unsafe { ffi::sapp_height() }
 }
 pub fn heightf() -> f32 {
-    unsafe {
-        ffi::sapp_heightf()
-    }
+    unsafe { ffi::sapp_heightf() }
 }
 pub fn color_format() -> i32 {
-    unsafe {
-        ffi::sapp_color_format()
-    }
+    unsafe { ffi::sapp_color_format() }
 }
 pub fn depth_format() -> i32 {
-    unsafe {
-        ffi::sapp_depth_format()
-    }
+    unsafe { ffi::sapp_depth_format() }
 }
 pub fn sample_count() -> i32 {
-    unsafe {
-        ffi::sapp_sample_count()
-    }
+    unsafe { ffi::sapp_sample_count() }
 }
 pub fn high_dpi() -> bool {
-    unsafe {
-        ffi::sapp_high_dpi()
-    }
+    unsafe { ffi::sapp_high_dpi() }
 }
 pub fn dpi_scale() -> f32 {
-    unsafe {
-        ffi::sapp_dpi_scale()
-    }
+    unsafe { ffi::sapp_dpi_scale() }
 }
 pub fn show_keyboard(show: bool) {
-    unsafe {
-        ffi::sapp_show_keyboard(show)
-    }
+    unsafe { ffi::sapp_show_keyboard(show) }
 }
 pub fn keyboard_shown() -> bool {
-    unsafe {
-        ffi::sapp_keyboard_shown()
-    }
+    unsafe { ffi::sapp_keyboard_shown() }
 }
 pub fn is_fullscreen() -> bool {
-    unsafe {
-        ffi::sapp_is_fullscreen()
-    }
+    unsafe { ffi::sapp_is_fullscreen() }
 }
 pub fn toggle_fullscreen() {
-    unsafe {
-        ffi::sapp_toggle_fullscreen()
-    }
+    unsafe { ffi::sapp_toggle_fullscreen() }
 }
 pub fn show_mouse(show: bool) {
-    unsafe {
-        ffi::sapp_show_mouse(show)
-    }
+    unsafe { ffi::sapp_show_mouse(show) }
 }
 pub fn mouse_shown() -> bool {
-    unsafe {
-        ffi::sapp_mouse_shown()
-    }
+    unsafe { ffi::sapp_mouse_shown() }
 }
 pub fn lock_mouse(lock: bool) {
-    unsafe {
-        ffi::sapp_lock_mouse(lock)
-    }
+    unsafe { ffi::sapp_lock_mouse(lock) }
 }
 pub fn mouse_locked() -> bool {
-    unsafe {
-        ffi::sapp_mouse_locked()
-    }
+    unsafe { ffi::sapp_mouse_locked() }
 }
 pub fn set_mouse_cursor(cursor: MouseCursor) {
-    unsafe {
-        ffi::sapp_set_mouse_cursor(cursor)
-    }
+    unsafe { ffi::sapp_set_mouse_cursor(cursor) }
 }
 pub fn get_mouse_cursor() -> MouseCursor {
-    unsafe {
-        ffi::sapp_get_mouse_cursor()
-    }
+    unsafe { ffi::sapp_get_mouse_cursor() }
 }
 pub fn userdata() -> *mut core::ffi::c_void {
-    unsafe {
-        ffi::sapp_userdata()
-    }
+    unsafe { ffi::sapp_userdata() }
 }
 pub fn query_desc() -> Desc {
-    unsafe {
-        ffi::sapp_query_desc()
-    }
+    unsafe { ffi::sapp_query_desc() }
 }
 pub fn request_quit() {
-    unsafe {
-        ffi::sapp_request_quit()
-    }
+    unsafe { ffi::sapp_request_quit() }
 }
 pub fn cancel_quit() {
-    unsafe {
-        ffi::sapp_cancel_quit()
-    }
+    unsafe { ffi::sapp_cancel_quit() }
 }
 pub fn quit() {
-    unsafe {
-        ffi::sapp_quit()
-    }
+    unsafe { ffi::sapp_quit() }
 }
 pub fn consume_event() {
-    unsafe {
-        ffi::sapp_consume_event()
-    }
+    unsafe { ffi::sapp_consume_event() }
 }
 pub fn frame_count() -> u64 {
-    unsafe {
-        ffi::sapp_frame_count()
-    }
+    unsafe { ffi::sapp_frame_count() }
 }
 pub fn frame_duration() -> f64 {
-    unsafe {
-        ffi::sapp_frame_duration()
-    }
+    unsafe { ffi::sapp_frame_duration() }
 }
 pub fn set_clipboard_string(str: &str) {
     unsafe {
@@ -900,9 +855,7 @@ pub fn set_clipboard_string(str: &str) {
     }
 }
 pub fn get_clipboard_string() -> &'static str {
-    unsafe {
-        c_char_ptr_to_rust_str(ffi::sapp_get_clipboard_string())
-    }
+    unsafe { c_char_ptr_to_rust_str(ffi::sapp_get_clipboard_string()) }
 }
 pub fn set_window_title(str: &str) {
     unsafe {
@@ -911,132 +864,80 @@ pub fn set_window_title(str: &str) {
     }
 }
 pub fn set_icon(icon_desc: &IconDesc) {
-    unsafe {
-        ffi::sapp_set_icon(icon_desc)
-    }
+    unsafe { ffi::sapp_set_icon(icon_desc) }
 }
 pub fn get_num_dropped_files() -> i32 {
-    unsafe {
-        ffi::sapp_get_num_dropped_files()
-    }
+    unsafe { ffi::sapp_get_num_dropped_files() }
 }
 pub fn get_dropped_file_path(index: i32) -> &'static str {
-    unsafe {
-        c_char_ptr_to_rust_str(ffi::sapp_get_dropped_file_path(index))
-    }
+    unsafe { c_char_ptr_to_rust_str(ffi::sapp_get_dropped_file_path(index)) }
 }
 pub fn run(desc: &Desc) {
-    unsafe {
-        ffi::sapp_run(desc)
-    }
+    unsafe { ffi::sapp_run(desc) }
 }
 pub fn egl_get_display() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_egl_get_display()
-    }
+    unsafe { ffi::sapp_egl_get_display() }
 }
 pub fn egl_get_context() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_egl_get_context()
-    }
+    unsafe { ffi::sapp_egl_get_context() }
 }
 pub fn gles2() -> bool {
-    unsafe {
-        ffi::sapp_gles2()
-    }
+    unsafe { ffi::sapp_gles2() }
 }
 pub fn html5_ask_leave_site(ask: bool) {
-    unsafe {
-        ffi::sapp_html5_ask_leave_site(ask)
-    }
+    unsafe { ffi::sapp_html5_ask_leave_site(ask) }
 }
 pub fn html5_get_dropped_file_size(index: i32) -> u32 {
-    unsafe {
-        ffi::sapp_html5_get_dropped_file_size(index)
-    }
+    unsafe { ffi::sapp_html5_get_dropped_file_size(index) }
 }
 pub fn html5_fetch_dropped_file(request: &Html5FetchRequest) {
-    unsafe {
-        ffi::sapp_html5_fetch_dropped_file(request)
-    }
+    unsafe { ffi::sapp_html5_fetch_dropped_file(request) }
 }
 pub fn metal_get_device() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_metal_get_device()
-    }
+    unsafe { ffi::sapp_metal_get_device() }
 }
 pub fn metal_get_renderpass_descriptor() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_metal_get_renderpass_descriptor()
-    }
+    unsafe { ffi::sapp_metal_get_renderpass_descriptor() }
 }
 pub fn metal_get_drawable() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_metal_get_drawable()
-    }
+    unsafe { ffi::sapp_metal_get_drawable() }
 }
 pub fn macos_get_window() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_macos_get_window()
-    }
+    unsafe { ffi::sapp_macos_get_window() }
 }
 pub fn ios_get_window() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_ios_get_window()
-    }
+    unsafe { ffi::sapp_ios_get_window() }
 }
 pub fn d3d11_get_device() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_d3d11_get_device()
-    }
+    unsafe { ffi::sapp_d3d11_get_device() }
 }
 pub fn d3d11_get_device_context() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_d3d11_get_device_context()
-    }
+    unsafe { ffi::sapp_d3d11_get_device_context() }
 }
 pub fn d3d11_get_swap_chain() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_d3d11_get_swap_chain()
-    }
+    unsafe { ffi::sapp_d3d11_get_swap_chain() }
 }
 pub fn d3d11_get_render_target_view() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_d3d11_get_render_target_view()
-    }
+    unsafe { ffi::sapp_d3d11_get_render_target_view() }
 }
 pub fn d3d11_get_depth_stencil_view() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_d3d11_get_depth_stencil_view()
-    }
+    unsafe { ffi::sapp_d3d11_get_depth_stencil_view() }
 }
 pub fn win32_get_hwnd() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_win32_get_hwnd()
-    }
+    unsafe { ffi::sapp_win32_get_hwnd() }
 }
 pub fn wgpu_get_device() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_wgpu_get_device()
-    }
+    unsafe { ffi::sapp_wgpu_get_device() }
 }
 pub fn wgpu_get_render_view() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_wgpu_get_render_view()
-    }
+    unsafe { ffi::sapp_wgpu_get_render_view() }
 }
 pub fn wgpu_get_resolve_view() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_wgpu_get_resolve_view()
-    }
+    unsafe { ffi::sapp_wgpu_get_resolve_view() }
 }
 pub fn wgpu_get_depth_stencil_view() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_wgpu_get_depth_stencil_view()
-    }
+    unsafe { ffi::sapp_wgpu_get_depth_stencil_view() }
 }
 pub fn android_get_native_activity() -> *const core::ffi::c_void {
-    unsafe {
-        ffi::sapp_android_get_native_activity()
-    }
+    unsafe { ffi::sapp_android_get_native_activity() }
 }
