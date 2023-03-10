@@ -12,7 +12,7 @@ fn make_sokol() {
     let mut build = cc::Build::new();
     let tool = build.try_get_compiler().unwrap();
 
-    let debug_info_requested = std::env::var("DEBUG").ok().is_some();
+    let debug_info_requested = std::env::var("SOKOL_DEBUG").ok().is_some();
     let is_msvc = tool.is_like_msvc();
     const BASE_C_DIR: &str = "src/sokol/c/";
 
@@ -29,6 +29,11 @@ fn make_sokol() {
     let wayland_desired = std::env::var("SOKOL_WAYLAND").is_ok();
     let force_egl = std::env::var("SOKOL_FORCE_EGL").is_ok();
 
+    println!("cargo:rerun-if-env-changed=SOKOL_BACKEND");
+    println!("cargo:rerun-if-env-changed=SOKOL_WAYLAND");
+    println!("cargo:rerun-if-env-changed=SOKOL_FORCE_EGL");
+    println!("cargo:rerun-if-env-changed=SOKOL_DEBUG");
+
     let backend = match &desired_backend[..] {
         "AUTO" => {
             if cfg!(target_os = "windows") && is_msvc {
@@ -39,6 +44,13 @@ fn make_sokol() {
                 SokolBackend::Gl
             }
         }
+
+        "D3D11" => SokolBackend::D3d11,
+        "METAL" => SokolBackend::Metal,
+        "GL" => SokolBackend::Gl,
+        "GLES2" => SokolBackend::Gles2,
+        "GLES3" => SokolBackend::Gles3,
+        "WGPU" => SokolBackend::Wgpu,
 
         _ => panic!("Unknown SOKOL_BACKEND: {desired_backend}"),
     };
