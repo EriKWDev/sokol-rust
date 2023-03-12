@@ -22,13 +22,13 @@ extern "C" fn init() {
     });
 }
 
-extern "C" fn frame() {
+extern "C" fn frame_userdata(userdata: *mut core::ffi::c_void) {
     /*
         NOTE: We then need to turn the raw c pointer into a mutable reference to the same
               type as we created in main. This is safe as long as the data was indeed provided
               and the type is the same.
     */
-    let state: &mut UserData = unsafe { &mut *(sokol::app::userdata() as *mut _) };
+    let state: &mut UserData = unsafe { &mut *(userdata as *mut _) };
 
     /*
         NOTE: Just randomly modifying the data here for demonstration
@@ -60,15 +60,21 @@ fn main() {
     let mut user_data = UserData::default();
 
     sokol::app::run(&sokol::app::Desc {
-        init_cb: Some(init),
-        cleanup_cb: Some(cleanup),
-        frame_cb: Some(frame),
-
         /*
             NOTE: 'user_data' is allocated on the stack in the main function and we take a
                   mutable reference to it which we cast to a pointer and pass to sokol
         */
         user_data: &mut user_data as *mut _ as _,
+
+        init_cb: Some(init),
+        cleanup_cb: Some(cleanup),
+
+        /*
+            NOTE: We can use the userdata callbacks to get the userdata passed as an argument,
+                  but we could also use the normal callbacks and call sokol::app::userdata() to
+                  fetch the data manually
+        */
+        frame_userdata_cb: Some(frame_userdata),
 
         width: 800,
         height: 600,

@@ -106,11 +106,8 @@ fn make_sokol() {
 
         println!("cargo:rerun-if-changed={}", file);
 
-        //
-        // MacOS: need ARC, so compile sokol.m with -fobjc-arc
-        //
         if cfg!(target_os = "macos") {
-            build.flag("-fobjc-arc");
+            build.flag("-ObjC");
         }
         build.file(file);
     }
