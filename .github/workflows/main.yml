@@ -1,6 +1,16 @@
 name: Rust
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+    - 'build.rs'
+    - 'src/**'
+    - 'examples/**'
+  pull_request:
+    paths:
+    - 'build.rs'
+    - 'src/**'
+    - 'examples/**'
 
 jobs:
   build:
