@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 /*
     #version:1# (machine generated, don't edit!)
 
@@ -20,16 +22,20 @@
 
 */
 
+use sokol::gfx as sg;
+
 pub const ATTR_VS_POSITION: usize = 0;
 pub const ATTR_VS_COLOR0: usize = 1;
 pub const SLOT_VS_PARAMS: usize = 0;
+
 #[derive(Debug, Clone, Copy)]
 #[repr(C)]
 pub struct VsParams {
     pub mvp: crate::math::Mat4,
 }
 
-/* #version 330
+/*
+   #version 330
 
    uniform vec4 vs_params[4];
    layout(location = 0) in vec4 position;
@@ -378,26 +384,24 @@ const FS_SOURCE_METAL_MACOS: [u8; 389] = [
     0x0a, 0x7d, 0x0a, 0x0a, 0x00,
 ];
 
-pub fn cube_shader_desc(backend: sokol::gfx::Backend) -> sokol::gfx::ShaderDesc {
-    let mut desc = sokol::gfx::ShaderDesc::new();
-
+pub fn cube_shader_desc(backend: sg::Backend) -> sg::ShaderDesc {
+    let mut desc = sg::ShaderDesc::new();
     match backend {
-        sokol::gfx::Backend::Glcore33 => {
+        sg::Backend::Glcore33 => {
             desc.attrs[0].name = b"position\0".as_ptr() as _;
             desc.attrs[1].name = b"color0\0".as_ptr() as _;
             desc.vs.source = &VS_SOURCE_GLSL330 as *const _ as *const _;
             desc.vs.entry = b"main\0".as_ptr() as _;
             desc.vs.uniform_blocks[0].size = 64;
-            desc.vs.uniform_blocks[0].layout = sokol::gfx::UniformLayout::Std140;
+            desc.vs.uniform_blocks[0].layout = sg::UniformLayout::Std140;
             desc.vs.uniform_blocks[0].uniforms[0].name = b"vs_params\0".as_ptr() as _;
-            desc.vs.uniform_blocks[0].uniforms[0]._type = sokol::gfx::UniformType::Float4;
+            desc.vs.uniform_blocks[0].uniforms[0]._type = sg::UniformType::Float4;
             desc.vs.uniform_blocks[0].uniforms[0].array_count = 4;
             desc.fs.source = &FS_SOURCE_GLSL330 as *const _ as *const _;
             desc.fs.entry = b"main\0".as_ptr() as _;
             desc.label = b"cube_shader\0".as_ptr() as _;
         }
-
-        sokol::gfx::Backend::D3d11 => {
+        sg::Backend::D3d11 => {
             desc.attrs[0].sem_name = b"TEXCOORD\0".as_ptr() as _;
             desc.attrs[0].sem_index = 0;
             desc.attrs[1].sem_name = b"TEXCOORD\0".as_ptr() as _;
@@ -406,18 +410,17 @@ pub fn cube_shader_desc(backend: sokol::gfx::Backend) -> sokol::gfx::ShaderDesc 
             desc.vs.d3d11_target = b"vs_4_0\0".as_ptr() as _;
             desc.vs.entry = b"main\0".as_ptr() as _;
             desc.vs.uniform_blocks[0].size = 64;
-            desc.vs.uniform_blocks[0].layout = sokol::gfx::UniformLayout::Std140;
+            desc.vs.uniform_blocks[0].layout = sg::UniformLayout::Std140;
             desc.fs.source = &FS_SOURCE_HLSL4 as *const _ as *const _;
             desc.fs.d3d11_target = b"ps_4_0\0".as_ptr() as _;
             desc.fs.entry = b"main\0".as_ptr() as _;
             desc.label = b"cube_shader\0".as_ptr() as _;
         }
-
-        sokol::gfx::Backend::MetalMacos => {
+        sg::Backend::MetalMacos => {
             desc.vs.source = &VS_SOURCE_METAL_MACOS as *const _ as *const _;
             desc.vs.entry = b"main0\0".as_ptr() as _;
             desc.vs.uniform_blocks[0].size = 64;
-            desc.vs.uniform_blocks[0].layout = sokol::gfx::UniformLayout::Std140;
+            desc.vs.uniform_blocks[0].layout = sg::UniformLayout::Std140;
             desc.fs.source = &FS_SOURCE_METAL_MACOS as *const _ as *const _;
             desc.fs.entry = b"main0\0".as_ptr() as _;
             desc.label = b"cube_shader\0".as_ptr() as _;
@@ -425,6 +428,5 @@ pub fn cube_shader_desc(backend: sokol::gfx::Backend) -> sokol::gfx::ShaderDesc 
 
         _ => {}
     }
-
     desc
 }

@@ -9,27 +9,27 @@ mod shader;
 
 use math as m;
 use sokol::app as sapp;
-use sokol::gfx as gl;
+use sokol::gfx as sg;
 
 struct State {
     rx: f32,
     ry: f32,
 
-    pip: gl::Pipeline,
-    bind: gl::Bindings,
+    pip: sg::Pipeline,
+    bind: sg::Bindings,
 }
 
 static mut STATE: State = State {
     rx: 0.0,
     ry: 0.0,
-    pip: gl::Pipeline::new(),
-    bind: gl::Bindings::new(),
+    pip: sg::Pipeline::new(),
+    bind: sg::Bindings::new(),
 };
 
 extern "C" fn init() {
     let state = unsafe { &mut STATE };
 
-    gl::setup(&gl::Desc {
+    sg::setup(&sg::Desc {
         context: sokol::glue::context(),
 
         ..Default::default()
@@ -68,8 +68,8 @@ extern "C" fn init() {
          1.0,  1.0,  1.0,   1.0, 0.0, 0.5, 1.0,
          1.0,  1.0, -1.0,   1.0, 0.0, 0.5, 1.0,
     ];
-    state.bind.vertex_buffers[0] = gl::make_buffer(&gl::BufferDesc {
-        data: gl::slice_as_range(VERTICES),
+    state.bind.vertex_buffers[0] = sg::make_buffer(&sg::BufferDesc {
+        data: sg::slice_as_range(VERTICES),
         ..Default::default()
     });
 
@@ -84,32 +84,32 @@ extern "C" fn init() {
         22, 21, 20,  23, 22, 20,
     ];
 
-    state.bind.index_buffer = gl::make_buffer(&gl::BufferDesc {
-        data: gl::slice_as_range(INDICES),
-        _type: gl::BufferType::Indexbuffer,
+    state.bind.index_buffer = sg::make_buffer(&sg::BufferDesc {
+        data: sg::slice_as_range(INDICES),
+        _type: sg::BufferType::Indexbuffer,
         ..Default::default()
     });
 
     // shader and pipeline object
 
-    state.pip = gl::make_pipeline(&gl::PipelineDesc {
-        shader: gl::make_shader(&shader::cube_shader_desc(gl::query_backend())),
+    state.pip = sg::make_pipeline(&sg::PipelineDesc {
+        shader: sg::make_shader(&shader::cube_shader_desc(sg::query_backend())),
         layout: {
-            let mut layout = gl::LayoutDesc::new();
+            let mut layout = sg::LayoutDesc::new();
             layout.buffers[0].stride = 28;
 
-            layout.attrs[shader::ATTR_VS_POSITION].format = gl::VertexFormat::Float3;
-            layout.attrs[shader::ATTR_VS_COLOR0].format = gl::VertexFormat::Float4;
+            layout.attrs[shader::ATTR_VS_POSITION].format = sg::VertexFormat::Float3;
+            layout.attrs[shader::ATTR_VS_COLOR0].format = sg::VertexFormat::Float4;
 
             layout
         },
 
-        index_type: gl::IndexType::Uint16,
-        cull_mode: gl::CullMode::Back,
+        index_type: sg::IndexType::Uint16,
+        cull_mode: sg::CullMode::Back,
 
-        depth: gl::DepthState {
+        depth: sg::DepthState {
             write_enabled: true,
-            compare: gl::CompareFunc::LessEqual,
+            compare: sg::CompareFunc::LessEqual,
 
             ..Default::default()
         },
@@ -130,10 +130,10 @@ extern "C" fn frame() {
         mvp: compute_mvp(state.rx, state.ry),
     };
 
-    let mut pass_action = gl::PassAction::new();
-    pass_action.colors[0] = gl::ColorAttachmentAction {
-        action: gl::Action::Clear,
-        value: gl::Color {
+    let mut pass_action = sg::PassAction::new();
+    pass_action.colors[0] = sg::ColorAttachmentAction {
+        action: sg::Action::Clear,
+        value: sg::Color {
             r: 0.25,
             g: 0.5,
             b: 0.75,
@@ -141,17 +141,17 @@ extern "C" fn frame() {
         },
     };
 
-    gl::begin_default_pass(&pass_action, sapp::width(), sapp::height());
-    gl::apply_pipeline(state.pip);
-    gl::apply_bindings(&state.bind);
-    gl::apply_uniforms(
-        gl::ShaderStage::Vs,
+    sg::begin_default_pass(&pass_action, sapp::width(), sapp::height());
+    sg::apply_pipeline(state.pip);
+    sg::apply_bindings(&state.bind);
+    sg::apply_uniforms(
+        sg::ShaderStage::Vs,
         shader::SLOT_VS_PARAMS,
-        &gl::value_as_range(&vs_params),
+        &sg::value_as_range(&vs_params),
     );
-    gl::draw(0, 36, 1);
-    gl::end_pass();
-    gl::commit();
+    sg::draw(0, 36, 1);
+    sg::end_pass();
+    sg::commit();
 }
 
 pub fn compute_mvp(rx: f32, ry: f32) -> [[f32; 4]; 4] {
@@ -166,7 +166,7 @@ pub fn compute_mvp(rx: f32, ry: f32) -> [[f32; 4]; 4] {
 }
 
 extern "C" fn cleanup() {
-    gl::shutdown()
+    sg::shutdown()
 }
 
 fn main() {

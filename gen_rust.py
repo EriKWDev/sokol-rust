@@ -301,7 +301,7 @@ def is_rust_string(rust_type):
 
 # get C-style arguments of a function pointer as string
 def funcptr_args_c(field_type, prefix):
-    tokens = field_type[field_type.index("(*)") + 4 : -1].split(",")
+    tokens = field_type[field_type.index("(*)") + 4: -1].split(",")
     s = ""
     for token in tokens:
         arg_type = token.strip()
@@ -363,7 +363,7 @@ def funcdecl_result_c(decl, prefix):
         f"{func_name}.RESULT", default=decl_type[: decl_type.index("(")].strip()
     )
 
-    it = as_c_arg_type(None, result_type, prefix)    
+    it = as_c_arg_type(None, result_type, prefix)
     if it == "()" or it == "":
         return ""
     else:
@@ -380,7 +380,7 @@ def funcdecl_result_rust(decl, prefix):
 
     if is_rust_string(rust_res_type):
         rust_res_type = "&'static str"
-    
+
     if rust_res_type == "":
         return ""
     else:
@@ -511,8 +511,6 @@ def gen_struct(decl, prefix):
         else:
             sys.exit(f"ERROR gen_struct: {field_name}: {field_type};")
 
-
-
     #
     # TODO: Is this the best way to have zero-initialization with support for constants?
     #       core::mem::zeroed() cleaner?
@@ -576,7 +574,7 @@ def gen_enum(decl, prefix):
         l("#[repr(i32)]")
 
     rust_enum_name = as_rust_enum_type(enum_name, prefix)
-    
+
     l(f"pub enum {rust_enum_name} {{")
     for item_name, item in zip(names, decl["items"]):
         if item_name != "ForceU32":
@@ -631,7 +629,7 @@ def gen_func_rust(decl, prefix):
         rust_func_name = util.as_upper_snake_case(check_override(decl["name"]), prefix)
 
         #
-        # TODO: We need to generate an funcptr_result_c but we don't have the required 'field_type' 
+        # TODO: We need to generate an funcptr_result_c but we don't have the required 'field_type'
         #
         sys.exit("ERROR gen_func_rust(): Need to implement a c callback")
         # l(f"pub const {rust_func_name}: unsafe extern \"C\" fn {funcptr_args_c(decl, prefix)}{funcptr_result_c(field_type)} = {c_func_name};")
@@ -645,7 +643,6 @@ def gen_func_rust(decl, prefix):
             s = f"        c_char_ptr_to_rust_str(ffi::{c_func_name}("
         else:
             s = f"        ffi::{c_func_name}("
-
 
         for i, param_decl in enumerate(decl["params"]):
             arg_name = param_decl["name"]
@@ -767,7 +764,7 @@ def gen_module(inp, dep_prefixes):
     prefix = inp["prefix"]
 
     funcs = []
-    
+
     for decl in inp["decls"]:
         if not decl["is_dep"]:
             kind = decl["kind"]
@@ -793,6 +790,7 @@ def prepare():
         os.makedirs("sokol-rust/src/sokol/c")
     with open("sokol-rust/src/lib.rs", "w", newline="\n") as f_outp:
         f_outp.write("//! Automatically generated sokol bindings for Rust\n\n")
+
 
 def gen(c_header_path, c_prefix, dep_c_prefixes):
     if c_prefix not in module_names:
