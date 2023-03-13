@@ -1,17 +1,8 @@
 #[derive(Debug)]
-pub struct UserData {
+pub struct ExampleUserData {
     data: u8,
 
     map: std::collections::HashMap<u8, u8>,
-}
-
-impl Default for UserData {
-    fn default() -> Self {
-        Self {
-            data: 0,
-            map: Default::default(),
-        }
-    }
 }
 
 extern "C" fn init() {
@@ -24,14 +15,14 @@ extern "C" fn init() {
 
 extern "C" fn frame_userdata(userdata: *mut core::ffi::c_void) {
     /*
-        NOTE: We then need to turn the raw c pointer into a mutable reference to the same
-              type as we created in main. This is safe as long as the data was indeed provided
-              and the type is the same.
+        3. We then need to turn the raw c pointer into a mutable reference to the same
+           type as we created in main. This is safe as long as the data was indeed provided
+           and the type is the same.
     */
-    let state: &mut UserData = unsafe { &mut *(userdata as *mut _) };
+    let state: &mut ExampleUserData = unsafe { &mut *(userdata as *mut _) };
 
     /*
-        NOTE: Just randomly modifying the data here for demonstration
+        4. Just randomly modifying the data here for demonstration
     */
     state.data = state.data.wrapping_add(1);
     if state.data % 13 == 0 {
@@ -57,12 +48,15 @@ extern "C" fn cleanup() {
 fn main() {
     let window_title = b"test\0".as_ptr() as _;
 
-    let mut user_data = UserData::default();
+    let mut user_data = ExampleUserData {
+        data: 0,
+        map: std::collections::HashMap::default(),
+    };
 
     sokol::app::run(&sokol::app::Desc {
         /*
-            NOTE: 'user_data' is allocated on the stack in the main function and we take a
-                  mutable reference to it which we cast to a pointer and pass to sokol
+            1. 'user_data' is allocated on the stack in the main function and we take a
+               mutable reference to it which we cast to a pointer and pass to sokol
         */
         user_data: &mut user_data as *mut _ as _,
 
@@ -70,9 +64,9 @@ fn main() {
         cleanup_cb: Some(cleanup),
 
         /*
-            NOTE: We can use the userdata callbacks to get the userdata passed as an argument,
-                  but we could also use the normal callbacks and call sokol::app::userdata() to
-                  fetch the data manually
+            2. We can use the userdata callbacks to get the userdata passed as an argument,
+               but we could also use the normal callbacks and call sokol::app::userdata() to
+               fetch the data manually
         */
         frame_userdata_cb: Some(frame_userdata),
 
