@@ -3,7 +3,7 @@
 ## Sokol-rust
 Auto-generated Rust bindings for the [sokol headers](https://github.com/floooh/sokol).
 
-Add as a dependency as such:
+Add `sokol-rust` as a dependency to your `Cargo.toml` as such:
 ```toml
 sokol = { version="*", git="https://github.com/ErikWDev/sokol-rust.git" }
 ```
