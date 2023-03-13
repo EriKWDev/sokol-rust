@@ -153,7 +153,7 @@ fn make_sokol() {
     if cfg!(target_os = "macos") {
         println!("cargo:rustc-link-lib=framework=Cocoa");
         println!("cargo:rustc-link-lib=framework=QuartzCore");
-        println!("cargo:rustc-link-lib=framework=Audiocc::Toolbox");
+        println!("cargo:rustc-link-lib=framework=AudioToolbox");
 
         if backend == SokolBackend::Metal {
             println!("cargo:rustc-link-lib=framework=Metal");
