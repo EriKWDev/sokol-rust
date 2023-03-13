@@ -8,7 +8,9 @@ use crate::gfx as sg;
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
+    c_str
+        .to_str()
+        .expect("c_char_ptr contained invalid Utf8 Data")
 }
 
 pub mod ffi {
@@ -19,7 +21,5 @@ pub mod ffi {
     }
 }
 pub fn context() -> sg::ContextDesc {
-    unsafe {
-        ffi::sapp_sgcontext()
-    }
+    unsafe { ffi::sapp_sgcontext() }
 }

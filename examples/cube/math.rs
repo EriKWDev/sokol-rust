@@ -7,19 +7,12 @@ pub struct Vec3 {
 }
 
 impl Vec3 {
-    pub const ZERO: Vec3 = Vec3 {
-        x: 0.0,
-        y: 0.0,
-        z: 0.0,
-    };
-    pub const UP: Vec3 = Vec3 {
-        x: 0.0,
-        y: 1.0,
-        z: 0.0,
-    };
+    pub const ZERO: Vec3 = vec3(0.0, 0.0, 0.0);
+    pub const UP: Vec3 = vec3(0.0, 1.0, 0.0);
 }
 
-pub fn vec3(x: f32, y: f32, z: f32) -> Vec3 {
+#[inline]
+pub const fn vec3(x: f32, y: f32, z: f32) -> Vec3 {
     Vec3 { x, y, z }
 }
 
@@ -28,17 +21,23 @@ pub type Mat4 = [[f32; 4]; 4];
 impl std::ops::Sub<Vec3> for Vec3 {
     type Output = Vec3;
 
+    #[inline]
     fn sub(self, rhs: Vec3) -> Self::Output {
-        vec3(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z)
+        sub_vec3(self, rhs)
     }
+}
+
+pub fn sub_vec3(v0: Vec3, v1: Vec3) -> Vec3 {
+    vec3(v0.x - v1.x, v0.y - v1.y, v0.z - v1.z)
 }
 
 pub fn dot_vec3(v0: Vec3, v1: Vec3) -> f32 {
     v0.x * v1.x + v0.y * v1.y + v0.z * v1.z
 }
 
+#[inline]
 pub fn len_vec3(v: Vec3) -> f32 {
-    return f32::sqrt(dot_vec3(v, v));
+    return dot_vec3(v, v).sqrt();
 }
 
 pub fn norm_vec3(v: Vec3) -> Vec3 {

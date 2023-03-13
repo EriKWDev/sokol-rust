@@ -706,13 +706,16 @@ def gen_helpers(inp):
     l("}")
     l("")
 
-    if inp['prefix'] in ['sg_', 'sdtx_', 'sshape_']:
+    if inp['prefix'] in ['sg_', 'sdtx_', 'sshape_', 'sapp_']:
+        l("/// Helper function to cast a rust slice into a sokol Range")
         l(f"pub fn slice_as_range<T>(data: &[T]) -> {range_struct_name} {{")
         l(f"    {range_struct_name} {{ size: data.len() * std::mem::size_of::<T>(), ptr: data.as_ptr() as *const _ }}")
         l("}")
+        l("/// Helper function to cast a rust reference into a sokol Range")
         l(f"pub fn value_as_range<T>(value: &T) -> {range_struct_name} {{")
         l(f"    {range_struct_name} {{ size: std::mem::size_of::<T>(), ptr: value as *const T as *const _ }}")
         l("}")
+        l("")
         l(f"impl<T> From<&[T]> for {range_struct_name} {{")
         l("    #[inline]")
         l("    fn from(data: &[T]) -> Self {")
@@ -725,6 +728,7 @@ def gen_helpers(inp):
         l("        value_as_range(value)")
         l("    }")
         l("}")
+        l("")
 
     # if inp["prefix"] == "sdtx_":
     #     l("/// std.fmt compatible Writer")

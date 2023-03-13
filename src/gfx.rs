@@ -11,18 +11,21 @@ fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str 
         .expect("c_char_ptr contained invalid Utf8 Data")
 }
 
+/// Helper function to cast a rust slice into a sokol Range
 pub fn slice_as_range<T>(data: &[T]) -> Range {
     Range {
-        ptr: data.as_ptr() as *const _,
         size: data.len() * std::mem::size_of::<T>(),
+        ptr: data.as_ptr() as *const _,
     }
 }
+/// Helper function to cast a rust reference into a sokol Range
 pub fn value_as_range<T>(value: &T) -> Range {
     Range {
-        ptr: value as *const T as *const _,
         size: std::mem::size_of::<T>(),
+        ptr: value as *const T as *const _,
     }
 }
+
 impl<T> From<&[T]> for Range {
     #[inline]
     fn from(data: &[T]) -> Self {
@@ -35,6 +38,7 @@ impl<T> From<&T> for Range {
         value_as_range(value)
     }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct Buffer {

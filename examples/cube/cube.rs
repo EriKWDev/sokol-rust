@@ -85,7 +85,7 @@ extern "C" fn init() {
     ];
 
     state.bind.index_buffer = gl::make_buffer(&gl::BufferDesc {
-        data: INDICES.into(),
+        data: gl::slice_as_range(INDICES),
         _type: gl::BufferType::Indexbuffer,
         ..Default::default()
     });

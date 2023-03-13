@@ -8,15 +8,26 @@ use crate::gfx as sg;
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
+    c_str
+        .to_str()
+        .expect("c_char_ptr contained invalid Utf8 Data")
 }
 
+/// Helper function to cast a rust slice into a sokol Range
 pub fn slice_as_range<T>(data: &[T]) -> Range {
-    Range { size: data.len() * std::mem::size_of::<T>(), ptr: data.as_ptr() as *const _ }
+    Range {
+        size: data.len() * std::mem::size_of::<T>(),
+        ptr: data.as_ptr() as *const _,
+    }
 }
+/// Helper function to cast a rust reference into a sokol Range
 pub fn value_as_range<T>(value: &T) -> Range {
-    Range { size: std::mem::size_of::<T>(), ptr: value as *const T as *const _ }
+    Range {
+        size: std::mem::size_of::<T>(),
+        ptr: value as *const T as *const _,
+    }
 }
+
 impl<T> From<&[T]> for Range {
     #[inline]
     fn from(data: &[T]) -> Self {
@@ -29,6 +40,7 @@ impl<T> From<&T> for Range {
         value_as_range(value)
     }
 }
+
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 #[repr(i32)]
 pub enum LogItem {
@@ -52,7 +64,17 @@ impl Default for LogItem {
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct Logger {
-    pub func: Option<extern "C" fn(*const core::ffi::c_char, u32, u32, *const core::ffi::c_char, u32, *const core::ffi::c_char, *mut core::ffi::c_void)>,
+    pub func: Option<
+        extern "C" fn(
+            *const core::ffi::c_char,
+            u32,
+            u32,
+            *const core::ffi::c_char,
+            u32,
+            *const core::ffi::c_char,
+            *mut core::ffi::c_void,
+        ),
+    >,
     pub user_data: *mut core::ffi::c_void,
 }
 impl Logger {
@@ -75,9 +97,7 @@ pub struct Context {
 }
 impl Context {
     pub const fn new() -> Self {
-        Self {
-            id: 0,
-        }
+        Self { id: 0 }
     }
 }
 impl Default for Context {
@@ -248,179 +268,109 @@ pub mod ffi {
     }
 }
 pub fn setup(desc: &Desc) {
-    unsafe {
-        ffi::sdtx_setup(desc)
-    }
+    unsafe { ffi::sdtx_setup(desc) }
 }
 pub fn shutdown() {
-    unsafe {
-        ffi::sdtx_shutdown()
-    }
+    unsafe { ffi::sdtx_shutdown() }
 }
 pub fn font_kc853() -> FontDesc {
-    unsafe {
-        ffi::sdtx_font_kc853()
-    }
+    unsafe { ffi::sdtx_font_kc853() }
 }
 pub fn font_kc854() -> FontDesc {
-    unsafe {
-        ffi::sdtx_font_kc854()
-    }
+    unsafe { ffi::sdtx_font_kc854() }
 }
 pub fn font_z1013() -> FontDesc {
-    unsafe {
-        ffi::sdtx_font_z1013()
-    }
+    unsafe { ffi::sdtx_font_z1013() }
 }
 pub fn font_cpc() -> FontDesc {
-    unsafe {
-        ffi::sdtx_font_cpc()
-    }
+    unsafe { ffi::sdtx_font_cpc() }
 }
 pub fn font_c64() -> FontDesc {
-    unsafe {
-        ffi::sdtx_font_c64()
-    }
+    unsafe { ffi::sdtx_font_c64() }
 }
 pub fn font_oric() -> FontDesc {
-    unsafe {
-        ffi::sdtx_font_oric()
-    }
+    unsafe { ffi::sdtx_font_oric() }
 }
 pub fn make_context(desc: &ContextDesc) -> Context {
-    unsafe {
-        ffi::sdtx_make_context(desc)
-    }
+    unsafe { ffi::sdtx_make_context(desc) }
 }
 pub fn destroy_context(ctx: Context) {
-    unsafe {
-        ffi::sdtx_destroy_context(ctx)
-    }
+    unsafe { ffi::sdtx_destroy_context(ctx) }
 }
 pub fn set_context(ctx: Context) {
-    unsafe {
-        ffi::sdtx_set_context(ctx)
-    }
+    unsafe { ffi::sdtx_set_context(ctx) }
 }
 pub fn get_context() -> Context {
-    unsafe {
-        ffi::sdtx_get_context()
-    }
+    unsafe { ffi::sdtx_get_context() }
 }
 pub fn default_context() -> Context {
-    unsafe {
-        ffi::sdtx_default_context()
-    }
+    unsafe { ffi::sdtx_default_context() }
 }
 pub fn draw() {
-    unsafe {
-        ffi::sdtx_draw()
-    }
+    unsafe { ffi::sdtx_draw() }
 }
 pub fn context_draw(ctx: Context) {
-    unsafe {
-        ffi::sdtx_context_draw(ctx)
-    }
+    unsafe { ffi::sdtx_context_draw(ctx) }
 }
 pub fn draw_layer(layer_id: i32) {
-    unsafe {
-        ffi::sdtx_draw_layer(layer_id)
-    }
+    unsafe { ffi::sdtx_draw_layer(layer_id) }
 }
 pub fn context_draw_layer(ctx: Context, layer_id: i32) {
-    unsafe {
-        ffi::sdtx_context_draw_layer(ctx, layer_id)
-    }
+    unsafe { ffi::sdtx_context_draw_layer(ctx, layer_id) }
 }
 pub fn layer(layer_id: i32) {
-    unsafe {
-        ffi::sdtx_layer(layer_id)
-    }
+    unsafe { ffi::sdtx_layer(layer_id) }
 }
 pub fn font(font_index: usize) {
-    unsafe {
-        ffi::sdtx_font(font_index)
-    }
+    unsafe { ffi::sdtx_font(font_index) }
 }
 pub fn canvas(w: f32, h: f32) {
-    unsafe {
-        ffi::sdtx_canvas(w, h)
-    }
+    unsafe { ffi::sdtx_canvas(w, h) }
 }
 pub fn origin(x: f32, y: f32) {
-    unsafe {
-        ffi::sdtx_origin(x, y)
-    }
+    unsafe { ffi::sdtx_origin(x, y) }
 }
 pub fn home() {
-    unsafe {
-        ffi::sdtx_home()
-    }
+    unsafe { ffi::sdtx_home() }
 }
 pub fn pos(x: f32, y: f32) {
-    unsafe {
-        ffi::sdtx_pos(x, y)
-    }
+    unsafe { ffi::sdtx_pos(x, y) }
 }
 pub fn pos_x(x: f32) {
-    unsafe {
-        ffi::sdtx_pos_x(x)
-    }
+    unsafe { ffi::sdtx_pos_x(x) }
 }
 pub fn pos_y(y: f32) {
-    unsafe {
-        ffi::sdtx_pos_y(y)
-    }
+    unsafe { ffi::sdtx_pos_y(y) }
 }
 pub fn move_cursor(dx: f32, dy: f32) {
-    unsafe {
-        ffi::sdtx_move(dx, dy)
-    }
+    unsafe { ffi::sdtx_move(dx, dy) }
 }
 pub fn move_cursor_x(dx: f32) {
-    unsafe {
-        ffi::sdtx_move_x(dx)
-    }
+    unsafe { ffi::sdtx_move_x(dx) }
 }
 pub fn move_cursor_y(dy: f32) {
-    unsafe {
-        ffi::sdtx_move_y(dy)
-    }
+    unsafe { ffi::sdtx_move_y(dy) }
 }
 pub fn crlf() {
-    unsafe {
-        ffi::sdtx_crlf()
-    }
+    unsafe { ffi::sdtx_crlf() }
 }
 pub fn color3b(r: u8, g: u8, b: u8) {
-    unsafe {
-        ffi::sdtx_color3b(r, g, b)
-    }
+    unsafe { ffi::sdtx_color3b(r, g, b) }
 }
 pub fn color3f(r: f32, g: f32, b: f32) {
-    unsafe {
-        ffi::sdtx_color3f(r, g, b)
-    }
+    unsafe { ffi::sdtx_color3f(r, g, b) }
 }
 pub fn color4b(r: u8, g: u8, b: u8, a: u8) {
-    unsafe {
-        ffi::sdtx_color4b(r, g, b, a)
-    }
+    unsafe { ffi::sdtx_color4b(r, g, b, a) }
 }
 pub fn color4f(r: f32, g: f32, b: f32, a: f32) {
-    unsafe {
-        ffi::sdtx_color4f(r, g, b, a)
-    }
+    unsafe { ffi::sdtx_color4f(r, g, b, a) }
 }
 pub fn color1i(rgba: u32) {
-    unsafe {
-        ffi::sdtx_color1i(rgba)
-    }
+    unsafe { ffi::sdtx_color1i(rgba) }
 }
 pub fn putc(c: u8) {
-    unsafe {
-        ffi::sdtx_putc(c)
-    }
+    unsafe { ffi::sdtx_putc(c) }
 }
 pub fn puts(str: &str) {
     unsafe {

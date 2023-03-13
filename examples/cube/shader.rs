@@ -24,6 +24,7 @@ pub const ATTR_VS_POSITION: usize = 0;
 pub const ATTR_VS_COLOR0: usize = 1;
 pub const SLOT_VS_PARAMS: usize = 0;
 #[derive(Debug, Clone, Copy)]
+#[repr(C)]
 pub struct VsParams {
     pub mvp: crate::math::Mat4,
 }
