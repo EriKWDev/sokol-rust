@@ -3,6 +3,11 @@
 ## Sokol-rust
 Auto-generated Rust bindings for the [sokol headers](https://github.com/floooh/sokol).
 
+Add as a dependency as such:
+```toml
+sokol = { version="*", git="https://github.com/ErikWDev/sokol-rust.git" }
+```
+
 ## Updating the bindings
 To update, place the `gen_rust.py` script inside `sokol/bindgen` and clone this repository inside there. 
 Inside `gen_all.py`, import `gen_rust` like the other bindgens and call it's `gen` function the exact and
@@ -10,8 +15,6 @@ same way as the others.
 
 ```python
 import gen_rust
-
-# ...
 
 # Rust
 gen_rust.prepare()
