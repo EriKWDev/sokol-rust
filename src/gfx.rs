@@ -2,7 +2,7 @@
 
 #![allow(dead_code)]
 
-/// helper function to convert a C string to a rust string slice
+/// Helper function to convert a C string to a rust string slice
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
@@ -11,6 +11,30 @@ fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str 
         .expect("c_char_ptr contained invalid Utf8 Data")
 }
 
+pub fn slice_as_range<T>(data: &[T]) -> Range {
+    Range {
+        ptr: data.as_ptr() as *const _,
+        size: data.len() * std::mem::size_of::<T>(),
+    }
+}
+pub fn value_as_range<T>(value: &T) -> Range {
+    Range {
+        ptr: value as *const T as *const _,
+        size: std::mem::size_of::<T>(),
+    }
+}
+impl<T> From<&[T]> for Range {
+    #[inline]
+    fn from(data: &[T]) -> Self {
+        slice_as_range(data)
+    }
+}
+impl<T> From<&T> for Range {
+    #[inline]
+    fn from(value: &T) -> Self {
+        value_as_range(value)
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct Buffer {

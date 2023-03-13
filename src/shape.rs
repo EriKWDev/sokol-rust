@@ -4,15 +4,31 @@
 
 use crate::gfx as sg;
 
-/// helper function to convert a C string to a rust string slice
+/// Helper function to convert a C string to a rust string slice
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str
-        .to_str()
-        .expect("c_char_ptr contained invalid Utf8 Data")
+    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
 }
 
+pub fn slice_as_range<T>(data: &[T]) -> Range {
+    Range { size: data.len() * std::mem::size_of::<T>(), ptr: data.as_ptr() as *const _ }
+}
+pub fn value_as_range<T>(value: &T) -> Range {
+    Range { size: std::mem::size_of::<T>(), ptr: value as *const T as *const _ }
+}
+impl<T> From<&[T]> for Range {
+    #[inline]
+    fn from(data: &[T]) -> Self {
+        slice_as_range(data)
+    }
+}
+impl<T> From<&T> for Range {
+    #[inline]
+    fn from(value: &T) -> Self {
+        value_as_range(value)
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct Range {
@@ -39,7 +55,9 @@ pub struct Mat4 {
 }
 impl Mat4 {
     pub const fn new() -> Self {
-        Self { m: [[0.0; 4]; 4] }
+        Self {
+            m: [[0.0; 4]; 4],
+        }
     }
 }
 impl Default for Mat4 {
@@ -103,7 +121,10 @@ pub struct SizesItem {
 }
 impl SizesItem {
     pub const fn new() -> Self {
-        Self { num: 0, size: 0 }
+        Self {
+            num: 0,
+            size: 0,
+        }
     }
 }
 impl Default for SizesItem {
@@ -354,74 +375,122 @@ pub mod ffi {
     }
 }
 pub fn build_plane(buf: &Buffer, params: &Plane) -> Buffer {
-    unsafe { ffi::sshape_build_plane(buf, params) }
+    unsafe {
+        ffi::sshape_build_plane(buf, params)
+    }
 }
 pub fn build_box(buf: &Buffer, params: &Box) -> Buffer {
-    unsafe { ffi::sshape_build_box(buf, params) }
+    unsafe {
+        ffi::sshape_build_box(buf, params)
+    }
 }
 pub fn build_sphere(buf: &Buffer, params: &Sphere) -> Buffer {
-    unsafe { ffi::sshape_build_sphere(buf, params) }
+    unsafe {
+        ffi::sshape_build_sphere(buf, params)
+    }
 }
 pub fn build_cylinder(buf: &Buffer, params: &Cylinder) -> Buffer {
-    unsafe { ffi::sshape_build_cylinder(buf, params) }
+    unsafe {
+        ffi::sshape_build_cylinder(buf, params)
+    }
 }
 pub fn build_torus(buf: &Buffer, params: &Torus) -> Buffer {
-    unsafe { ffi::sshape_build_torus(buf, params) }
+    unsafe {
+        ffi::sshape_build_torus(buf, params)
+    }
 }
 pub fn plane_sizes(tiles: u32) -> Sizes {
-    unsafe { ffi::sshape_plane_sizes(tiles) }
+    unsafe {
+        ffi::sshape_plane_sizes(tiles)
+    }
 }
 pub fn box_sizes(tiles: u32) -> Sizes {
-    unsafe { ffi::sshape_box_sizes(tiles) }
+    unsafe {
+        ffi::sshape_box_sizes(tiles)
+    }
 }
 pub fn sphere_sizes(slices: u32, stacks: u32) -> Sizes {
-    unsafe { ffi::sshape_sphere_sizes(slices, stacks) }
+    unsafe {
+        ffi::sshape_sphere_sizes(slices, stacks)
+    }
 }
 pub fn cylinder_sizes(slices: u32, stacks: u32) -> Sizes {
-    unsafe { ffi::sshape_cylinder_sizes(slices, stacks) }
+    unsafe {
+        ffi::sshape_cylinder_sizes(slices, stacks)
+    }
 }
 pub fn torus_sizes(sides: u32, rings: u32) -> Sizes {
-    unsafe { ffi::sshape_torus_sizes(sides, rings) }
+    unsafe {
+        ffi::sshape_torus_sizes(sides, rings)
+    }
 }
 pub fn element_range(buf: &Buffer) -> ElementRange {
-    unsafe { ffi::sshape_element_range(buf) }
+    unsafe {
+        ffi::sshape_element_range(buf)
+    }
 }
 pub fn vertex_buffer_desc(buf: &Buffer) -> sg::BufferDesc {
-    unsafe { ffi::sshape_vertex_buffer_desc(buf) }
+    unsafe {
+        ffi::sshape_vertex_buffer_desc(buf)
+    }
 }
 pub fn index_buffer_desc(buf: &Buffer) -> sg::BufferDesc {
-    unsafe { ffi::sshape_index_buffer_desc(buf) }
+    unsafe {
+        ffi::sshape_index_buffer_desc(buf)
+    }
 }
 pub fn buffer_layout_desc() -> sg::BufferLayoutDesc {
-    unsafe { ffi::sshape_buffer_layout_desc() }
+    unsafe {
+        ffi::sshape_buffer_layout_desc()
+    }
 }
 pub fn position_attr_desc() -> sg::VertexAttrDesc {
-    unsafe { ffi::sshape_position_attr_desc() }
+    unsafe {
+        ffi::sshape_position_attr_desc()
+    }
 }
 pub fn normal_attr_desc() -> sg::VertexAttrDesc {
-    unsafe { ffi::sshape_normal_attr_desc() }
+    unsafe {
+        ffi::sshape_normal_attr_desc()
+    }
 }
 pub fn texcoord_attr_desc() -> sg::VertexAttrDesc {
-    unsafe { ffi::sshape_texcoord_attr_desc() }
+    unsafe {
+        ffi::sshape_texcoord_attr_desc()
+    }
 }
 pub fn color_attr_desc() -> sg::VertexAttrDesc {
-    unsafe { ffi::sshape_color_attr_desc() }
+    unsafe {
+        ffi::sshape_color_attr_desc()
+    }
 }
 pub fn color_4f(r: f32, g: f32, b: f32, a: f32) -> u32 {
-    unsafe { ffi::sshape_color_4f(r, g, b, a) }
+    unsafe {
+        ffi::sshape_color_4f(r, g, b, a)
+    }
 }
 pub fn color_3f(r: f32, g: f32, b: f32) -> u32 {
-    unsafe { ffi::sshape_color_3f(r, g, b) }
+    unsafe {
+        ffi::sshape_color_3f(r, g, b)
+    }
 }
 pub fn color_4b(r: u8, g: u8, b: u8, a: u8) -> u32 {
-    unsafe { ffi::sshape_color_4b(r, g, b, a) }
+    unsafe {
+        ffi::sshape_color_4b(r, g, b, a)
+    }
 }
 pub fn color_3b(r: u8, g: u8, b: u8) -> u32 {
-    unsafe { ffi::sshape_color_3b(r, g, b) }
+    unsafe {
+        ffi::sshape_color_3b(r, g, b)
+    }
 }
 pub fn mat4(m: &f32) -> Mat4 {
-    unsafe { ffi::sshape_mat4(m) }
+    unsafe {
+        ffi::sshape_mat4(m)
+    }
 }
 pub fn mat4_transpose(m: &f32) -> Mat4 {
-    unsafe { ffi::sshape_mat4_transpose(m) }
+    unsafe {
+        ffi::sshape_mat4_transpose(m)
+    }
 }

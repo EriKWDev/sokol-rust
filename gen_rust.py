@@ -41,6 +41,8 @@ ignores = [
     # "sg_trace_hooks",
 ]
 
+range_struct_name = "Range"
+
 # functions that need to be exposed as 'raw' C callbacks without a rust wrapper function
 # c_callbacks = ["slog_func"]
 c_callbacks = []
@@ -511,8 +513,10 @@ def gen_struct(decl, prefix):
 
 
 
+    #
     # TODO: Is this the best way to have zero-initialization with support for constants?
     #       core::mem::zeroed() cleaner?
+    #
 
     l("#[repr(C)]")
     l("#[derive(Copy, Clone, Debug)]")
@@ -539,7 +543,10 @@ def gen_struct(decl, prefix):
 
 def gen_consts(decl, prefix):
     for item in decl["items"]:
-        # TODO: What type should these constants have?
+        #
+        # TODO: What type should these constants have? Currently giving all `usize`
+        #       unless specifically overriden by `special_constant_types`
+        #
 
         item_name = check_override(item["name"])
         if item_name in special_constant_types:
@@ -623,7 +630,9 @@ def gen_func_rust(decl, prefix):
     if c_func_name in c_callbacks:
         rust_func_name = util.as_upper_snake_case(check_override(decl["name"]), prefix)
 
-        # TODO: We need to generate an fincptr_result_c but we don't have a 'field_type' 
+        #
+        # TODO: We need to generate an funcptr_result_c but we don't have the required 'field_type' 
+        #
         sys.exit("ERROR gen_func_rust(): Need to implement a c callback")
         # l(f"pub const {rust_func_name}: unsafe extern \"C\" fn {funcptr_args_c(decl, prefix)}{funcptr_result_c(field_type)} = {c_func_name};")
     else:
@@ -689,13 +698,33 @@ def gen_imports(inp, dep_prefixes):
 
 
 def gen_helpers(inp):
-    l("/// helper function to convert a C string to a rust string slice")
+    l("/// Helper function to convert a C string to a rust string slice")
     l("#[inline]")
     l("fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {")
     l("    let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };")
     l("    c_str.to_str().expect(\"c_char_ptr contained invalid Utf8 Data\")")
     l("}")
     l("")
+
+    if inp['prefix'] in ['sg_', 'sdtx_', 'sshape_']:
+        l(f"pub fn slice_as_range<T>(data: &[T]) -> {range_struct_name} {{")
+        l(f"    {range_struct_name} {{ size: data.len() * std::mem::size_of::<T>(), ptr: data.as_ptr() as *const _ }}")
+        l("}")
+        l(f"pub fn value_as_range<T>(value: &T) -> {range_struct_name} {{")
+        l(f"    {range_struct_name} {{ size: std::mem::size_of::<T>(), ptr: value as *const T as *const _ }}")
+        l("}")
+        l(f"impl<T> From<&[T]> for {range_struct_name} {{")
+        l("    #[inline]")
+        l("    fn from(data: &[T]) -> Self {")
+        l("        slice_as_range(data)")
+        l("    }")
+        l("}")
+        l(f"impl<T> From<&T> for {range_struct_name} {{")
+        l("    #[inline]")
+        l("    fn from(value: &T) -> Self {")
+        l("        value_as_range(value)")
+        l("    }")
+        l("}")
 
     # if inp["prefix"] == "sdtx_":
     #     l("/// std.fmt compatible Writer")

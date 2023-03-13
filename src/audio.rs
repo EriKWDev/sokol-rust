@@ -2,13 +2,12 @@
 
 #![allow(dead_code)]
 
-/// helper function to convert a C string to a rust string slice
+
+/// Helper function to convert a C string to a rust string slice
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str
-        .to_str()
-        .expect("c_char_ptr contained invalid Utf8 Data")
+    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -64,17 +63,7 @@ impl Default for LogItem {
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct Logger {
-    pub func: Option<
-        extern "C" fn(
-            *const core::ffi::c_char,
-            u32,
-            u32,
-            *const core::ffi::c_char,
-            u32,
-            *const core::ffi::c_char,
-            *mut core::ffi::c_void,
-        ),
-    >,
+    pub func: Option<extern "C" fn(*const core::ffi::c_char, u32, u32, *const core::ffi::c_char, u32, *const core::ffi::c_char, *mut core::ffi::c_void)>,
     pub user_data: *mut core::ffi::c_void,
 }
 impl Logger {
@@ -164,35 +153,57 @@ pub mod ffi {
     }
 }
 pub fn setup(desc: &Desc) {
-    unsafe { ffi::saudio_setup(desc) }
+    unsafe {
+        ffi::saudio_setup(desc)
+    }
 }
 pub fn shutdown() {
-    unsafe { ffi::saudio_shutdown() }
+    unsafe {
+        ffi::saudio_shutdown()
+    }
 }
 pub fn isvalid() -> bool {
-    unsafe { ffi::saudio_isvalid() }
+    unsafe {
+        ffi::saudio_isvalid()
+    }
 }
 pub fn userdata() -> *mut core::ffi::c_void {
-    unsafe { ffi::saudio_userdata() }
+    unsafe {
+        ffi::saudio_userdata()
+    }
 }
 pub fn query_desc() -> Desc {
-    unsafe { ffi::saudio_query_desc() }
+    unsafe {
+        ffi::saudio_query_desc()
+    }
 }
 pub fn sample_rate() -> i32 {
-    unsafe { ffi::saudio_sample_rate() }
+    unsafe {
+        ffi::saudio_sample_rate()
+    }
 }
 pub fn buffer_frames() -> i32 {
-    unsafe { ffi::saudio_buffer_frames() }
+    unsafe {
+        ffi::saudio_buffer_frames()
+    }
 }
 pub fn channels() -> i32 {
-    unsafe { ffi::saudio_channels() }
+    unsafe {
+        ffi::saudio_channels()
+    }
 }
 pub fn suspended() -> bool {
-    unsafe { ffi::saudio_suspended() }
+    unsafe {
+        ffi::saudio_suspended()
+    }
 }
 pub fn expect() -> i32 {
-    unsafe { ffi::saudio_expect() }
+    unsafe {
+        ffi::saudio_expect()
+    }
 }
 pub fn push(frames: &f32, num_frames: i32) -> i32 {
-    unsafe { ffi::saudio_push(frames, num_frames) }
+    unsafe {
+        ffi::saudio_push(frames, num_frames)
+    }
 }
