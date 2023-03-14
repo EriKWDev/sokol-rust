@@ -46,6 +46,8 @@ Build and run individual examples as such:
 cargo run --example clear
 cargo run --example cube
 cargo run --example mrt
+cargo run --example debugtext
+cargo run --example sgl-context
 cargo run --example userdata
 ```
 
