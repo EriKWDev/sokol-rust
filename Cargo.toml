@@ -21,5 +21,9 @@ path = "examples/cube/cube.rs"
 name = "mrt"
 path = "examples/mrt/mrt.rs"
 
+[[example]]
+name = "debugtext"
+path = "examples/debugtext/debugtext.rs"
+
 [build-dependencies]
 cc = { version = "1.0", features = ["parallel"] }
