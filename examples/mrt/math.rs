@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 #[repr(C)]
 #[derive(Debug, Clone, Copy)]
 pub struct Vec3 {
