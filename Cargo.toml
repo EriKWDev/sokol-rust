@@ -25,5 +25,9 @@ path = "examples/mrt/mrt.rs"
 name = "debugtext"
 path = "examples/debugtext/debugtext.rs"
 
+[[example]]
+name = "sgl-context"
+path = "examples/sgl-context/sgl-context.rs"
+
 [build-dependencies]
 cc = { version = "1.0", features = ["parallel"] }
