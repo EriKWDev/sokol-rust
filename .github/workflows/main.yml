@@ -6,11 +6,13 @@ on:
     - 'build.rs'
     - 'src/**'
     - 'examples/**'
+    - '.github/workflows/main.yml'
   pull_request:
     paths:
     - 'build.rs'
     - 'src/**'
     - 'examples/**'
+    - '.github/workflows/main.yml'
 
 jobs:
   build:
@@ -38,4 +40,4 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --example clear
+          args: --all-targets
