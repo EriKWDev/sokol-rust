@@ -48,6 +48,7 @@ cargo run --example cube
 cargo run --example mrt
 cargo run --example debugtext
 cargo run --example sgl-context
+cargo run --example sgl-points
 cargo run --example userdata
 ```
 

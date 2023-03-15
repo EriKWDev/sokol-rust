@@ -29,5 +29,9 @@ path = "examples/debugtext/debugtext.rs"
 name = "sgl-context"
 path = "examples/sgl-context/sgl-context.rs"
 
+[[example]]
+name = "sgl-points"
+path = "examples/sgl-points/sgl-points.rs"
+
 [build-dependencies]
 cc = { version = "1.0", features = ["parallel"] }
