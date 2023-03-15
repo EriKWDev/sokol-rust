@@ -10,6 +10,7 @@ mod shader;
 use math as m;
 use sokol::app as sapp;
 use sokol::gfx as sg;
+use sokol::glue as sglue;
 
 struct State {
     rx: f32,
@@ -30,7 +31,7 @@ extern "C" fn init() {
     let state = unsafe { &mut STATE };
 
     sg::setup(&sg::Desc {
-        context: sokol::glue::context(),
+        context: sglue::context(),
 
         ..Default::default()
     });
