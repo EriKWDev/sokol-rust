@@ -101,37 +101,37 @@ static void write_header(const args_t& args, const input_t& inp, const spirvcros
         const spirvcross_source_t* fs_src = find_spirvcross_source_by_shader_name(prog.fs_name, inp, spirvcross);
         assert(vs_src && fs_src);
         L("        Shader program '{}':\n", prog.name);
-        L("            Get shader desc: shd::{}{}_shader_desc(sg::query_backend());\n", mod_prefix(inp), prog.name);
+        L("            Get shader desc: {}{}_shader_desc(sg::query_backend());\n", mod_prefix(inp), prog.name);
         L("            Vertex shader: {}\n", prog.vs_name);
         L("                Attribute slots:\n");
         const snippet_t& vs_snippet = inp.snippets[vs_src->snippet_index];
         for (const attr_t& attr: vs_src->refl.inputs) {
             if (attr.slot >= 0) {
-                L("                    ATTR_{}{}_{} = {}\n", to_upper_case(mod_prefix(inp)), vs_snippet.name, attr.name, attr.slot);
+                L("                    ATTR_{}{}_{} = {}\n", to_upper_case(mod_prefix(inp)), to_upper_case(vs_snippet.name), to_upper_case(attr.name), attr.slot);
             }
         }
         for (const uniform_block_t& ub: vs_src->refl.uniform_blocks) {
             L("                Uniform block '{}':\n", ub.struct_name);
-            L("                    C struct: {}{}_t\n", to_upper_case(mod_prefix(inp)), ub.struct_name);
-            L("                    Bind slot: SLOT_{}{} = {}\n", to_upper_case(mod_prefix(inp)), ub.struct_name, ub.slot);
+            L("                    C struct: {}{}_t\n", mod_prefix(inp), ub.struct_name);
+            L("                    Bind slot: SLOT_{}{} = {}\n", to_upper_case(mod_prefix(inp)), to_upper_case(ub.struct_name), ub.slot);
         }
         for (const image_t& img: vs_src->refl.images) {
             L("                Image '{}':\n", img.name);
             L("                    Type: {}\n", img_type_to_sokol_type_str(img.type));
             L("                    Component Type: {}\n", img_basetype_to_sokol_samplertype_str(img.base_type));
-            L("                    Bind slot: SLOT_{}{} = {}\n", to_upper_case(mod_prefix(inp)), img.name, img.slot);
+            L("                    Bind slot: SLOT_{}{} = {}\n", to_upper_case(mod_prefix(inp)), to_upper_case(img.name), img.slot);
         }
         L("            Fragment shader: {}\n", prog.fs_name);
         for (const uniform_block_t& ub: fs_src->refl.uniform_blocks) {
             L("                Uniform block '{}':\n", ub.struct_name);
-            L("                    C struct: {}{}_t\n", to_upper_case(mod_prefix(inp)), ub.struct_name);
-            L("                    Bind slot: SLOT_{}{} = {}\n", to_upper_case(mod_prefix(inp)), ub.struct_name, ub.slot);
+            L("                    C struct: {}{}_t\n", mod_prefix(inp), ub.struct_name);
+            L("                    Bind slot: SLOT_{}{} = {}\n", to_upper_case(mod_prefix(inp)), to_upper_case(ub.struct_name), ub.slot);
         }
         for (const image_t& img: fs_src->refl.images) {
             L("                Image '{}':\n", img.name);
             L("                    Type: {}\n", img_type_to_sokol_type_str(img.type));
             L("                    Component Type: {}\n", img_basetype_to_sokol_samplertype_str(img.base_type));
-            L("                    Bind slot: SLOT_{}{} = {}\n", to_upper_case(mod_prefix(inp)), img.name, img.slot);
+            L("                    Bind slot: SLOT_{}{} = {}\n", to_upper_case(mod_prefix(inp)), to_upper_case(img.name), img.slot);
         }
         L("  \n");
     }
@@ -164,8 +164,10 @@ static void write_uniform_blocks(const input_t& inp, const spirvcross_t& spirvcr
     for (const uniform_block_t& ub: spirvcross.unique_uniform_blocks) {
         L("pub const SLOT_{}{}: usize = {};\n", to_upper_case(mod_prefix(inp)), to_upper_case(ub.struct_name), ub.slot);
 
-        // TODO: Should this be "#[repr(C), align(16)]"? I saw that sokolzig.cc mentioned being 16-aligned
-        //       but I saw nothing about in in the odin generator.
+        /*
+           TODO: Should this be "#[repr(C), align(16)]"? I saw that sokolzig.cc mentioned being 16-aligned
+                 but I saw nothing about in in the odin generator.
+        */
         L("#[repr(C)]\n");
         L("pub struct {} {{\n", to_pascal_case(fmt::format("{}{}", mod_prefix(inp), ub.struct_name)));
         int cur_offset = 0;
