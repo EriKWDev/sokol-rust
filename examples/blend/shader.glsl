@@ -1,10 +1,9 @@
 //------------------------------------------------------------------------------
 //  shaders for blend-sapp sample
 //------------------------------------------------------------------------------
-@header package main
-@header import sg "../../sokol/gfx"
-@header import m "../math"
-@ctype mat4 m.mat4
+@header use crate::math as m
+
+@ctype mat4 m::Mat4
 
 @vs vs_bg
 in vec2 position;

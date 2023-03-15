@@ -1,8 +1,6 @@
-@header package main
-@header import sg "../../sokol/gfx"
-@header import m "../math"
+@header use crate::math as m
 
-@ctype mat4 m.mat4
+@ctype mat4 m::Mat4
 
 @vs vs
 uniform vs_params {

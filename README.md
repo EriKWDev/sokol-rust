@@ -59,3 +59,28 @@ be translated into rust manually as have been done for the examples. See `exampl
 for examples on how this has been done.
 
 I hope to add support for rust into the shader compiler as well.
+
+A work-in-progress version of the shader compiler can be found in `sokolrust.cc`. If you place it inside the `src/shdc/` folder
+of the [sokol-tools](https://github.com/floooh/sokol-tools), you just need to make some slight modifications to `main.cc` and re-compile
+the shader-compiler in order to add experimental support for rust shaders as well.
+
+```cpp
+// .. in main.cc switch case, add a case for rust
+case format_t::SOKOL_RUST:
+    output_err = sokolrust_t::gen(args, inp, spirvcross, bytecode);
+    break;
+
+// .. in shdc.h, add SOKOL_RUST as a format and implement the string conversions
+case SOKOL_RUST:    return "sokol_rust";
+// ..
+else if (str == "sokol_rust") {
+    return SOKOL_RUST;
+}
+
+// .. in util.cc, add a simple helper function
+std::string to_upper_case(const std::string& str) {
+    return pystring::upper(str);
+}
+// .. and declare it in shdc.h's namespace util { .. }
+std::string to_upper_case(const std::string& str);
+```

@@ -33,7 +33,7 @@ static mut STATE: State = State {
     quad_vs_params: shader::QuadVsParams { mvp: [[0.0; 4]; 4] },
     bg_fs_params: shader::BgFsParams {
         tick: 0.0,
-        _pad: [0; 12],
+        _pad_4: [0; 12],
     },
 };
 
