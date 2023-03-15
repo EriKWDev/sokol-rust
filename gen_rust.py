@@ -44,8 +44,7 @@ ignores = [
 range_struct_name = "Range"
 
 # functions that need to be exposed as 'raw' C callbacks without a rust wrapper function
-# c_callbacks = ["slog_func"]
-c_callbacks = []
+c_callbacks = ["slog_func"]
 
 # NOTE: syntax for function results: "func_name.RESULT"
 overrides = {
@@ -626,17 +625,29 @@ def gen_func_rust(decl, prefix):
     rust_res_type = funcdecl_result_rust(decl, prefix)
 
     if c_func_name in c_callbacks:
-        rust_func_name = util.as_upper_snake_case(check_override(decl["name"]), prefix)
-
-        #
-        # TODO: We need to generate an funcptr_result_c but we don't have the required 'field_type'
-        #
-        sys.exit("ERROR gen_func_rust(): Need to implement a c callback")
-        # l(f"pub const {rust_func_name}: unsafe extern \"C\" fn {funcptr_args_c(decl, prefix)}{funcptr_result_c(field_type)} = {c_func_name};")
+        c_res_type = funcdecl_result_c(decl, prefix)
+        l("#[inline]")
+        l(f'pub extern "C" fn {c_func_name}({funcdecl_args_c(decl, prefix)}){c_res_type} {{')
+        l("    unsafe {")
+        s = f"        ffi::{c_func_name}("
+        for i, param_decl in enumerate(decl["params"]):
+            if i > 0:
+                s += ", "
+            arg_name = param_decl["name"]
+            s += arg_name
+        s += ")"
+        l(s)
+        l("    }")
+        l("}")
     else:
-        l(
-            f"pub fn {rust_func_name}({funcdecl_args_rust(decl, prefix)}){rust_res_type} {{"
-        )
+        l("#[inline]")
+        l(f"pub fn {rust_func_name}({funcdecl_args_rust(decl, prefix)}){rust_res_type} {{")
+        for i, param_decl in enumerate(decl["params"]):
+            arg_name = param_decl["name"]
+            arg_type = param_decl["type"]
+            if util.is_string_ptr(arg_type):
+                l(f"        let tmp_{i} = std::ffi::CString::new({arg_name}).unwrap();")
+
         l("    unsafe {")
         if is_rust_string(rust_res_type):
             # special case: convert C string to rust string slice
@@ -645,20 +656,12 @@ def gen_func_rust(decl, prefix):
             s = f"        ffi::{c_func_name}("
 
         for i, param_decl in enumerate(decl["params"]):
-            arg_name = param_decl["name"]
-            arg_type = param_decl["type"]
-            if util.is_string_ptr(arg_type):
-                l(f"        let tmp_{i} = std::ffi::CString::new({arg_name}).unwrap();")
-
-        for i, param_decl in enumerate(decl["params"]):
             if i > 0:
                 s += ", "
             arg_name = param_decl["name"]
             arg_type = param_decl["type"]
 
-            if is_const_struct_ptr(arg_type):
-                s += f"{arg_name}"
-            elif util.is_string_ptr(arg_type):
+            if util.is_string_ptr(arg_type):
                 s += f"tmp_{i}.as_ptr()"
             else:
                 s += arg_name

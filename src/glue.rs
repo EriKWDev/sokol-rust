@@ -20,6 +20,7 @@ pub mod ffi {
         pub fn sapp_sgcontext() -> sg::ContextDesc;
     }
 }
+#[inline]
 pub fn context() -> sg::ContextDesc {
     unsafe { ffi::sapp_sgcontext() }
 }

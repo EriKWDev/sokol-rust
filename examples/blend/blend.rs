@@ -43,6 +43,10 @@ extern "C" fn init() {
     sg::setup(&sg::Desc {
         pipeline_pool_size: (NUM_BLEND_FACTORS * NUM_BLEND_FACTORS + 1) as _,
         context: sglue::context(),
+        logger: sg::Logger {
+            func: Some(sokol::log::slog_func),
+            ..Default::default()
+        },
         ..Default::default()
     });
 
@@ -178,17 +182,18 @@ fn main() {
         init_cb: Some(init),
         frame_cb: Some(frame),
         cleanup_cb: Some(cleanup),
-
         width: 800,
         height: 600,
         sample_count: 4,
         window_title,
-
+        logger: sapp::Logger {
+            func: Some(sokol::log::slog_func),
+            ..Default::default()
+        },
         icon: sapp::IconDesc {
             sokol_default: true,
             ..Default::default()
         },
-
         ..Default::default()
     });
 }

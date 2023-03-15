@@ -1,3 +1,6 @@
+use sokol::app as sapp;
+use sokol::gfx as sg;
+
 #[derive(Debug)]
 pub struct ExampleUserData {
     data: u8,
@@ -6,9 +9,12 @@ pub struct ExampleUserData {
 }
 
 extern "C" fn init() {
-    sokol::gfx::setup(&sokol::gfx::Desc {
+    sg::setup(&sg::Desc {
         context: sokol::glue::context(),
-
+        logger: sg::Logger {
+            func: Some(sokol::log::slog_func),
+            ..Default::default()
+        },
         ..Default::default()
     });
 }
@@ -34,15 +40,15 @@ extern "C" fn frame_userdata(userdata: *mut core::ffi::c_void) {
     }
     println!("{state:?}");
 
-    let pass_action = sokol::gfx::PassAction::new();
-    let (width, height) = (sokol::app::width(), sokol::app::height());
-    sokol::gfx::begin_default_pass(&pass_action, width, height);
-    sokol::gfx::end_pass();
-    sokol::gfx::commit();
+    let pass_action = sg::PassAction::new();
+    let (width, height) = (sapp::width(), sapp::height());
+    sg::begin_default_pass(&pass_action, width, height);
+    sg::end_pass();
+    sg::commit();
 }
 
 extern "C" fn cleanup() {
-    sokol::gfx::shutdown()
+    sg::shutdown()
 }
 
 fn main() {
@@ -53,33 +59,32 @@ fn main() {
         map: std::collections::HashMap::default(),
     };
 
-    sokol::app::run(&sokol::app::Desc {
+    sapp::run(&sapp::Desc {
         /*
             1. 'user_data' is allocated on the stack in the main function and we take a
                mutable reference to it which we cast to a pointer and pass to sokol
         */
         user_data: &mut user_data as *mut _ as _,
-
         init_cb: Some(init),
         cleanup_cb: Some(cleanup),
-
         /*
             2. We can use the userdata callbacks to get the userdata passed as an argument,
-               but we could also use the normal callbacks and call sokol::app::userdata() to
+               but we could also use the normal callbacks and call sapp::userdata() to
                fetch the data manually
         */
         frame_userdata_cb: Some(frame_userdata),
-
         width: 800,
         height: 600,
         sample_count: 4,
         window_title,
-
-        icon: sokol::app::IconDesc {
+        logger: sapp::Logger {
+            func: Some(sokol::log::slog_func),
+            ..Default::default()
+        },
+        icon: sapp::IconDesc {
             sokol_default: true,
             ..Default::default()
         },
-
         ..Default::default()
     });
 }

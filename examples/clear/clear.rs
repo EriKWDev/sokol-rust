@@ -14,6 +14,10 @@ extern "C" fn init() {
 
     sg::setup(&sg::Desc {
         context: sokol::glue::context(),
+        logger: sg::Logger {
+            func: Some(sokol::log::slog_func),
+            ..Default::default()
+        },
         ..Default::default()
     });
 
@@ -82,6 +86,10 @@ fn main() {
         width: 800,
         height: 600,
         sample_count: 4,
+        logger: sapp::Logger {
+            func: Some(sokol::log::slog_func),
+            ..Default::default()
+        },
         icon: sapp::IconDesc {
             sokol_default: true,
             ..Default::default()

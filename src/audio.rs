@@ -163,36 +163,47 @@ pub mod ffi {
         pub fn saudio_push(frames: *const f32, num_frames: i32) -> i32;
     }
 }
+#[inline]
 pub fn setup(desc: &Desc) {
     unsafe { ffi::saudio_setup(desc) }
 }
+#[inline]
 pub fn shutdown() {
     unsafe { ffi::saudio_shutdown() }
 }
+#[inline]
 pub fn isvalid() -> bool {
     unsafe { ffi::saudio_isvalid() }
 }
+#[inline]
 pub fn userdata() -> *mut core::ffi::c_void {
     unsafe { ffi::saudio_userdata() }
 }
+#[inline]
 pub fn query_desc() -> Desc {
     unsafe { ffi::saudio_query_desc() }
 }
+#[inline]
 pub fn sample_rate() -> i32 {
     unsafe { ffi::saudio_sample_rate() }
 }
+#[inline]
 pub fn buffer_frames() -> i32 {
     unsafe { ffi::saudio_buffer_frames() }
 }
+#[inline]
 pub fn channels() -> i32 {
     unsafe { ffi::saudio_channels() }
 }
+#[inline]
 pub fn suspended() -> bool {
     unsafe { ffi::saudio_suspended() }
 }
+#[inline]
 pub fn expect() -> i32 {
     unsafe { ffi::saudio_expect() }
 }
+#[inline]
 pub fn push(frames: &f32, num_frames: i32) -> i32 {
     unsafe { ffi::saudio_push(frames, num_frames) }
 }

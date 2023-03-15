@@ -38,6 +38,10 @@ extern "C" fn init() {
 
     sg::setup(&sg::Desc {
         context: sglue::context(),
+        logger: sg::Logger {
+            func: Some(sokol::log::slog_func),
+            ..Default::default()
+        },
         ..Default::default()
     });
 
@@ -56,8 +60,8 @@ fn print_font(font_index: usize, title: &str, r: u8, g: u8, b: u8) {
     sdtx::color3b(r, g, b);
     sdtx::puts(title);
 
-    for c in 32..=255 {
-        sdtx::putc(c);
+    for c in 32_i32..=255 {
+        sdtx::putc(c as u8);
         if ((c + 1) & 63) == 0 {
             sdtx::crlf();
         }
@@ -99,17 +103,17 @@ fn main() {
         init_cb: Some(init),
         frame_cb: Some(frame),
         cleanup_cb: Some(cleanup),
-
         width: 1024,
         height: 600,
-
         window_title,
-
+        logger: sapp::Logger {
+            func: Some(sokol::log::slog_func),
+            ..Default::default()
+        },
         icon: sapp::IconDesc {
             sokol_default: true,
             ..Default::default()
         },
-
         ..Default::default()
     })
 }

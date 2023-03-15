@@ -27,33 +27,43 @@ pub mod ffi {
         pub fn stm_ns(ticks: u64) -> f64;
     }
 }
+#[inline]
 pub fn setup() {
     unsafe { ffi::stm_setup() }
 }
+#[inline]
 pub fn now() -> u64 {
     unsafe { ffi::stm_now() }
 }
+#[inline]
 pub fn diff(new_ticks: u64, old_ticks: u64) -> u64 {
     unsafe { ffi::stm_diff(new_ticks, old_ticks) }
 }
+#[inline]
 pub fn since(start_ticks: u64) -> u64 {
     unsafe { ffi::stm_since(start_ticks) }
 }
+#[inline]
 pub fn laptime(last_time: &mut u64) -> u64 {
     unsafe { ffi::stm_laptime(last_time) }
 }
+#[inline]
 pub fn round_to_common_refresh_rate(frame_ticks: u64) -> u64 {
     unsafe { ffi::stm_round_to_common_refresh_rate(frame_ticks) }
 }
+#[inline]
 pub fn sec(ticks: u64) -> f64 {
     unsafe { ffi::stm_sec(ticks) }
 }
+#[inline]
 pub fn ms(ticks: u64) -> f64 {
     unsafe { ffi::stm_ms(ticks) }
 }
+#[inline]
 pub fn us(ticks: u64) -> f64 {
     unsafe { ffi::stm_us(ticks) }
 }
+#[inline]
 pub fn ns(ticks: u64) -> f64 {
     unsafe { ffi::stm_ns(ticks) }
 }

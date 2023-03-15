@@ -26,27 +26,19 @@ pub mod ffi {
         );
     }
 }
-pub fn func(
-    tag: &str,
+#[inline]
+pub extern "C" fn slog_func(
+    tag: *const core::ffi::c_char,
     log_level: u32,
     log_item: u32,
-    message: &str,
+    message: *const core::ffi::c_char,
     line_nr: u32,
-    filename: &str,
+    filename: *const core::ffi::c_char,
     user_data: *mut core::ffi::c_void,
 ) {
     unsafe {
-        let tmp_0 = std::ffi::CString::new(tag).unwrap();
-        let tmp_3 = std::ffi::CString::new(message).unwrap();
-        let tmp_5 = std::ffi::CString::new(filename).unwrap();
         ffi::slog_func(
-            tmp_0.as_ptr(),
-            log_level,
-            log_item,
-            tmp_3.as_ptr(),
-            line_nr,
-            tmp_5.as_ptr(),
-            user_data,
+            tag, log_level, log_item, message, line_nr, filename, user_data,
         )
     }
 }

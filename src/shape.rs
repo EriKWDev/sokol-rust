@@ -381,75 +381,99 @@ pub mod ffi {
         pub fn sshape_mat4_transpose(m: *const f32) -> Mat4;
     }
 }
+#[inline]
 pub fn build_plane(buf: &Buffer, params: &Plane) -> Buffer {
     unsafe { ffi::sshape_build_plane(buf, params) }
 }
+#[inline]
 pub fn build_box(buf: &Buffer, params: &Box) -> Buffer {
     unsafe { ffi::sshape_build_box(buf, params) }
 }
+#[inline]
 pub fn build_sphere(buf: &Buffer, params: &Sphere) -> Buffer {
     unsafe { ffi::sshape_build_sphere(buf, params) }
 }
+#[inline]
 pub fn build_cylinder(buf: &Buffer, params: &Cylinder) -> Buffer {
     unsafe { ffi::sshape_build_cylinder(buf, params) }
 }
+#[inline]
 pub fn build_torus(buf: &Buffer, params: &Torus) -> Buffer {
     unsafe { ffi::sshape_build_torus(buf, params) }
 }
+#[inline]
 pub fn plane_sizes(tiles: u32) -> Sizes {
     unsafe { ffi::sshape_plane_sizes(tiles) }
 }
+#[inline]
 pub fn box_sizes(tiles: u32) -> Sizes {
     unsafe { ffi::sshape_box_sizes(tiles) }
 }
+#[inline]
 pub fn sphere_sizes(slices: u32, stacks: u32) -> Sizes {
     unsafe { ffi::sshape_sphere_sizes(slices, stacks) }
 }
+#[inline]
 pub fn cylinder_sizes(slices: u32, stacks: u32) -> Sizes {
     unsafe { ffi::sshape_cylinder_sizes(slices, stacks) }
 }
+#[inline]
 pub fn torus_sizes(sides: u32, rings: u32) -> Sizes {
     unsafe { ffi::sshape_torus_sizes(sides, rings) }
 }
+#[inline]
 pub fn element_range(buf: &Buffer) -> ElementRange {
     unsafe { ffi::sshape_element_range(buf) }
 }
+#[inline]
 pub fn vertex_buffer_desc(buf: &Buffer) -> sg::BufferDesc {
     unsafe { ffi::sshape_vertex_buffer_desc(buf) }
 }
+#[inline]
 pub fn index_buffer_desc(buf: &Buffer) -> sg::BufferDesc {
     unsafe { ffi::sshape_index_buffer_desc(buf) }
 }
+#[inline]
 pub fn buffer_layout_desc() -> sg::BufferLayoutDesc {
     unsafe { ffi::sshape_buffer_layout_desc() }
 }
+#[inline]
 pub fn position_attr_desc() -> sg::VertexAttrDesc {
     unsafe { ffi::sshape_position_attr_desc() }
 }
+#[inline]
 pub fn normal_attr_desc() -> sg::VertexAttrDesc {
     unsafe { ffi::sshape_normal_attr_desc() }
 }
+#[inline]
 pub fn texcoord_attr_desc() -> sg::VertexAttrDesc {
     unsafe { ffi::sshape_texcoord_attr_desc() }
 }
+#[inline]
 pub fn color_attr_desc() -> sg::VertexAttrDesc {
     unsafe { ffi::sshape_color_attr_desc() }
 }
+#[inline]
 pub fn color_4f(r: f32, g: f32, b: f32, a: f32) -> u32 {
     unsafe { ffi::sshape_color_4f(r, g, b, a) }
 }
+#[inline]
 pub fn color_3f(r: f32, g: f32, b: f32) -> u32 {
     unsafe { ffi::sshape_color_3f(r, g, b) }
 }
+#[inline]
 pub fn color_4b(r: u8, g: u8, b: u8, a: u8) -> u32 {
     unsafe { ffi::sshape_color_4b(r, g, b, a) }
 }
+#[inline]
 pub fn color_3b(r: u8, g: u8, b: u8) -> u32 {
     unsafe { ffi::sshape_color_3b(r, g, b) }
 }
+#[inline]
 pub fn mat4(m: &f32) -> Mat4 {
     unsafe { ffi::sshape_mat4(m) }
 }
+#[inline]
 pub fn mat4_transpose(m: &f32) -> Mat4 {
     unsafe { ffi::sshape_mat4_transpose(m) }
 }

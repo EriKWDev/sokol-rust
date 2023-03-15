@@ -792,180 +792,233 @@ pub mod ffi {
         pub fn sapp_android_get_native_activity() -> *const core::ffi::c_void;
     }
 }
+#[inline]
 pub fn isvalid() -> bool {
     unsafe { ffi::sapp_isvalid() }
 }
+#[inline]
 pub fn width() -> i32 {
     unsafe { ffi::sapp_width() }
 }
+#[inline]
 pub fn widthf() -> f32 {
     unsafe { ffi::sapp_widthf() }
 }
+#[inline]
 pub fn height() -> i32 {
     unsafe { ffi::sapp_height() }
 }
+#[inline]
 pub fn heightf() -> f32 {
     unsafe { ffi::sapp_heightf() }
 }
+#[inline]
 pub fn color_format() -> i32 {
     unsafe { ffi::sapp_color_format() }
 }
+#[inline]
 pub fn depth_format() -> i32 {
     unsafe { ffi::sapp_depth_format() }
 }
+#[inline]
 pub fn sample_count() -> i32 {
     unsafe { ffi::sapp_sample_count() }
 }
+#[inline]
 pub fn high_dpi() -> bool {
     unsafe { ffi::sapp_high_dpi() }
 }
+#[inline]
 pub fn dpi_scale() -> f32 {
     unsafe { ffi::sapp_dpi_scale() }
 }
+#[inline]
 pub fn show_keyboard(show: bool) {
     unsafe { ffi::sapp_show_keyboard(show) }
 }
+#[inline]
 pub fn keyboard_shown() -> bool {
     unsafe { ffi::sapp_keyboard_shown() }
 }
+#[inline]
 pub fn is_fullscreen() -> bool {
     unsafe { ffi::sapp_is_fullscreen() }
 }
+#[inline]
 pub fn toggle_fullscreen() {
     unsafe { ffi::sapp_toggle_fullscreen() }
 }
+#[inline]
 pub fn show_mouse(show: bool) {
     unsafe { ffi::sapp_show_mouse(show) }
 }
+#[inline]
 pub fn mouse_shown() -> bool {
     unsafe { ffi::sapp_mouse_shown() }
 }
+#[inline]
 pub fn lock_mouse(lock: bool) {
     unsafe { ffi::sapp_lock_mouse(lock) }
 }
+#[inline]
 pub fn mouse_locked() -> bool {
     unsafe { ffi::sapp_mouse_locked() }
 }
+#[inline]
 pub fn set_mouse_cursor(cursor: MouseCursor) {
     unsafe { ffi::sapp_set_mouse_cursor(cursor) }
 }
+#[inline]
 pub fn get_mouse_cursor() -> MouseCursor {
     unsafe { ffi::sapp_get_mouse_cursor() }
 }
+#[inline]
 pub fn userdata() -> *mut core::ffi::c_void {
     unsafe { ffi::sapp_userdata() }
 }
+#[inline]
 pub fn query_desc() -> Desc {
     unsafe { ffi::sapp_query_desc() }
 }
+#[inline]
 pub fn request_quit() {
     unsafe { ffi::sapp_request_quit() }
 }
+#[inline]
 pub fn cancel_quit() {
     unsafe { ffi::sapp_cancel_quit() }
 }
+#[inline]
 pub fn quit() {
     unsafe { ffi::sapp_quit() }
 }
+#[inline]
 pub fn consume_event() {
     unsafe { ffi::sapp_consume_event() }
 }
+#[inline]
 pub fn frame_count() -> u64 {
     unsafe { ffi::sapp_frame_count() }
 }
+#[inline]
 pub fn frame_duration() -> f64 {
     unsafe { ffi::sapp_frame_duration() }
 }
+#[inline]
 pub fn set_clipboard_string(str: &str) {
-    unsafe {
-        let tmp_0 = std::ffi::CString::new(str).unwrap();
-        ffi::sapp_set_clipboard_string(tmp_0.as_ptr())
-    }
+    let tmp_0 = std::ffi::CString::new(str).unwrap();
+    unsafe { ffi::sapp_set_clipboard_string(tmp_0.as_ptr()) }
 }
+#[inline]
 pub fn get_clipboard_string() -> &'static str {
     unsafe { c_char_ptr_to_rust_str(ffi::sapp_get_clipboard_string()) }
 }
+#[inline]
 pub fn set_window_title(str: &str) {
-    unsafe {
-        let tmp_0 = std::ffi::CString::new(str).unwrap();
-        ffi::sapp_set_window_title(tmp_0.as_ptr())
-    }
+    let tmp_0 = std::ffi::CString::new(str).unwrap();
+    unsafe { ffi::sapp_set_window_title(tmp_0.as_ptr()) }
 }
+#[inline]
 pub fn set_icon(icon_desc: &IconDesc) {
     unsafe { ffi::sapp_set_icon(icon_desc) }
 }
+#[inline]
 pub fn get_num_dropped_files() -> i32 {
     unsafe { ffi::sapp_get_num_dropped_files() }
 }
+#[inline]
 pub fn get_dropped_file_path(index: i32) -> &'static str {
     unsafe { c_char_ptr_to_rust_str(ffi::sapp_get_dropped_file_path(index)) }
 }
+#[inline]
 pub fn run(desc: &Desc) {
     unsafe { ffi::sapp_run(desc) }
 }
+#[inline]
 pub fn egl_get_display() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_egl_get_display() }
 }
+#[inline]
 pub fn egl_get_context() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_egl_get_context() }
 }
+#[inline]
 pub fn gles2() -> bool {
     unsafe { ffi::sapp_gles2() }
 }
+#[inline]
 pub fn html5_ask_leave_site(ask: bool) {
     unsafe { ffi::sapp_html5_ask_leave_site(ask) }
 }
+#[inline]
 pub fn html5_get_dropped_file_size(index: i32) -> u32 {
     unsafe { ffi::sapp_html5_get_dropped_file_size(index) }
 }
+#[inline]
 pub fn html5_fetch_dropped_file(request: &Html5FetchRequest) {
     unsafe { ffi::sapp_html5_fetch_dropped_file(request) }
 }
+#[inline]
 pub fn metal_get_device() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_metal_get_device() }
 }
+#[inline]
 pub fn metal_get_renderpass_descriptor() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_metal_get_renderpass_descriptor() }
 }
+#[inline]
 pub fn metal_get_drawable() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_metal_get_drawable() }
 }
+#[inline]
 pub fn macos_get_window() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_macos_get_window() }
 }
+#[inline]
 pub fn ios_get_window() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_ios_get_window() }
 }
+#[inline]
 pub fn d3d11_get_device() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_d3d11_get_device() }
 }
+#[inline]
 pub fn d3d11_get_device_context() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_d3d11_get_device_context() }
 }
+#[inline]
 pub fn d3d11_get_swap_chain() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_d3d11_get_swap_chain() }
 }
+#[inline]
 pub fn d3d11_get_render_target_view() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_d3d11_get_render_target_view() }
 }
+#[inline]
 pub fn d3d11_get_depth_stencil_view() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_d3d11_get_depth_stencil_view() }
 }
+#[inline]
 pub fn win32_get_hwnd() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_win32_get_hwnd() }
 }
+#[inline]
 pub fn wgpu_get_device() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_wgpu_get_device() }
 }
+#[inline]
 pub fn wgpu_get_render_view() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_wgpu_get_render_view() }
 }
+#[inline]
 pub fn wgpu_get_resolve_view() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_wgpu_get_resolve_view() }
 }
+#[inline]
 pub fn wgpu_get_depth_stencil_view() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_wgpu_get_depth_stencil_view() }
 }
+#[inline]
 pub fn android_get_native_activity() -> *const core::ffi::c_void {
     unsafe { ffi::sapp_android_get_native_activity() }
 }

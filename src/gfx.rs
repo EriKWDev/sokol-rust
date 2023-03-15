@@ -2363,285 +2363,376 @@ pub mod ffi {
         pub fn sg_mtl_render_command_encoder() -> *const core::ffi::c_void;
     }
 }
+#[inline]
 pub fn setup(desc: &Desc) {
     unsafe { ffi::sg_setup(desc) }
 }
+#[inline]
 pub fn shutdown() {
     unsafe { ffi::sg_shutdown() }
 }
+#[inline]
 pub fn isvalid() -> bool {
     unsafe { ffi::sg_isvalid() }
 }
+#[inline]
 pub fn reset_state_cache() {
     unsafe { ffi::sg_reset_state_cache() }
 }
+#[inline]
 pub fn install_trace_hooks(trace_hooks: &TraceHooks) -> TraceHooks {
     unsafe { ffi::sg_install_trace_hooks(trace_hooks) }
 }
+#[inline]
 pub fn push_debug_group(name: &str) {
-    unsafe {
-        let tmp_0 = std::ffi::CString::new(name).unwrap();
-        ffi::sg_push_debug_group(tmp_0.as_ptr())
-    }
+    let tmp_0 = std::ffi::CString::new(name).unwrap();
+    unsafe { ffi::sg_push_debug_group(tmp_0.as_ptr()) }
 }
+#[inline]
 pub fn pop_debug_group() {
     unsafe { ffi::sg_pop_debug_group() }
 }
+#[inline]
 pub fn add_commit_listener(listener: CommitListener) -> bool {
     unsafe { ffi::sg_add_commit_listener(listener) }
 }
+#[inline]
 pub fn remove_commit_listener(listener: CommitListener) -> bool {
     unsafe { ffi::sg_remove_commit_listener(listener) }
 }
+#[inline]
 pub fn make_buffer(desc: &BufferDesc) -> Buffer {
     unsafe { ffi::sg_make_buffer(desc) }
 }
+#[inline]
 pub fn make_image(desc: &ImageDesc) -> Image {
     unsafe { ffi::sg_make_image(desc) }
 }
+#[inline]
 pub fn make_shader(desc: &ShaderDesc) -> Shader {
     unsafe { ffi::sg_make_shader(desc) }
 }
+#[inline]
 pub fn make_pipeline(desc: &PipelineDesc) -> Pipeline {
     unsafe { ffi::sg_make_pipeline(desc) }
 }
+#[inline]
 pub fn make_pass(desc: &PassDesc) -> Pass {
     unsafe { ffi::sg_make_pass(desc) }
 }
+#[inline]
 pub fn destroy_buffer(buf: Buffer) {
     unsafe { ffi::sg_destroy_buffer(buf) }
 }
+#[inline]
 pub fn destroy_image(img: Image) {
     unsafe { ffi::sg_destroy_image(img) }
 }
+#[inline]
 pub fn destroy_shader(shd: Shader) {
     unsafe { ffi::sg_destroy_shader(shd) }
 }
+#[inline]
 pub fn destroy_pipeline(pip: Pipeline) {
     unsafe { ffi::sg_destroy_pipeline(pip) }
 }
+#[inline]
 pub fn destroy_pass(pass: Pass) {
     unsafe { ffi::sg_destroy_pass(pass) }
 }
+#[inline]
 pub fn update_buffer(buf: Buffer, data: &Range) {
     unsafe { ffi::sg_update_buffer(buf, data) }
 }
+#[inline]
 pub fn update_image(img: Image, data: &ImageData) {
     unsafe { ffi::sg_update_image(img, data) }
 }
+#[inline]
 pub fn append_buffer(buf: Buffer, data: &Range) -> i32 {
     unsafe { ffi::sg_append_buffer(buf, data) }
 }
+#[inline]
 pub fn query_buffer_overflow(buf: Buffer) -> bool {
     unsafe { ffi::sg_query_buffer_overflow(buf) }
 }
+#[inline]
 pub fn query_buffer_will_overflow(buf: Buffer, size: usize) -> bool {
     unsafe { ffi::sg_query_buffer_will_overflow(buf, size) }
 }
+#[inline]
 pub fn begin_default_pass(pass_action: &PassAction, width: i32, height: i32) {
     unsafe { ffi::sg_begin_default_pass(pass_action, width, height) }
 }
+#[inline]
 pub fn begin_default_passf(pass_action: &PassAction, width: f32, height: f32) {
     unsafe { ffi::sg_begin_default_passf(pass_action, width, height) }
 }
+#[inline]
 pub fn begin_pass(pass: Pass, pass_action: &PassAction) {
     unsafe { ffi::sg_begin_pass(pass, pass_action) }
 }
+#[inline]
 pub fn apply_viewport(x: i32, y: i32, width: i32, height: i32, origin_top_left: bool) {
     unsafe { ffi::sg_apply_viewport(x, y, width, height, origin_top_left) }
 }
+#[inline]
 pub fn apply_viewportf(x: f32, y: f32, width: f32, height: f32, origin_top_left: bool) {
     unsafe { ffi::sg_apply_viewportf(x, y, width, height, origin_top_left) }
 }
+#[inline]
 pub fn apply_scissor_rect(x: i32, y: i32, width: i32, height: i32, origin_top_left: bool) {
     unsafe { ffi::sg_apply_scissor_rect(x, y, width, height, origin_top_left) }
 }
+#[inline]
 pub fn apply_scissor_rectf(x: f32, y: f32, width: f32, height: f32, origin_top_left: bool) {
     unsafe { ffi::sg_apply_scissor_rectf(x, y, width, height, origin_top_left) }
 }
+#[inline]
 pub fn apply_pipeline(pip: Pipeline) {
     unsafe { ffi::sg_apply_pipeline(pip) }
 }
+#[inline]
 pub fn apply_bindings(bindings: &Bindings) {
     unsafe { ffi::sg_apply_bindings(bindings) }
 }
+#[inline]
 pub fn apply_uniforms(stage: ShaderStage, ub_index: usize, data: &Range) {
     unsafe { ffi::sg_apply_uniforms(stage, ub_index, data) }
 }
+#[inline]
 pub fn draw(base_element: usize, num_elements: usize, num_instances: usize) {
     unsafe { ffi::sg_draw(base_element, num_elements, num_instances) }
 }
+#[inline]
 pub fn end_pass() {
     unsafe { ffi::sg_end_pass() }
 }
+#[inline]
 pub fn commit() {
     unsafe { ffi::sg_commit() }
 }
+#[inline]
 pub fn query_desc() -> Desc {
     unsafe { ffi::sg_query_desc() }
 }
+#[inline]
 pub fn query_backend() -> Backend {
     unsafe { ffi::sg_query_backend() }
 }
+#[inline]
 pub fn query_features() -> Features {
     unsafe { ffi::sg_query_features() }
 }
+#[inline]
 pub fn query_limits() -> Limits {
     unsafe { ffi::sg_query_limits() }
 }
+#[inline]
 pub fn query_pixelformat(fmt: PixelFormat) -> PixelformatInfo {
     unsafe { ffi::sg_query_pixelformat(fmt) }
 }
+#[inline]
 pub fn query_buffer_state(buf: Buffer) -> ResourceState {
     unsafe { ffi::sg_query_buffer_state(buf) }
 }
+#[inline]
 pub fn query_image_state(img: Image) -> ResourceState {
     unsafe { ffi::sg_query_image_state(img) }
 }
+#[inline]
 pub fn query_shader_state(shd: Shader) -> ResourceState {
     unsafe { ffi::sg_query_shader_state(shd) }
 }
+#[inline]
 pub fn query_pipeline_state(pip: Pipeline) -> ResourceState {
     unsafe { ffi::sg_query_pipeline_state(pip) }
 }
+#[inline]
 pub fn query_pass_state(pass: Pass) -> ResourceState {
     unsafe { ffi::sg_query_pass_state(pass) }
 }
+#[inline]
 pub fn query_buffer_info(buf: Buffer) -> BufferInfo {
     unsafe { ffi::sg_query_buffer_info(buf) }
 }
+#[inline]
 pub fn query_image_info(img: Image) -> ImageInfo {
     unsafe { ffi::sg_query_image_info(img) }
 }
+#[inline]
 pub fn query_shader_info(shd: Shader) -> ShaderInfo {
     unsafe { ffi::sg_query_shader_info(shd) }
 }
+#[inline]
 pub fn query_pipeline_info(pip: Pipeline) -> PipelineInfo {
     unsafe { ffi::sg_query_pipeline_info(pip) }
 }
+#[inline]
 pub fn query_pass_info(pass: Pass) -> PassInfo {
     unsafe { ffi::sg_query_pass_info(pass) }
 }
+#[inline]
 pub fn query_buffer_desc(buf: Buffer) -> BufferDesc {
     unsafe { ffi::sg_query_buffer_desc(buf) }
 }
+#[inline]
 pub fn query_image_desc(img: Image) -> ImageDesc {
     unsafe { ffi::sg_query_image_desc(img) }
 }
+#[inline]
 pub fn query_shader_desc(shd: Shader) -> ShaderDesc {
     unsafe { ffi::sg_query_shader_desc(shd) }
 }
+#[inline]
 pub fn query_pipeline_desc(pip: Pipeline) -> PipelineDesc {
     unsafe { ffi::sg_query_pipeline_desc(pip) }
 }
+#[inline]
 pub fn query_pass_desc(pass: Pass) -> PassDesc {
     unsafe { ffi::sg_query_pass_desc(pass) }
 }
+#[inline]
 pub fn query_buffer_defaults(desc: &BufferDesc) -> BufferDesc {
     unsafe { ffi::sg_query_buffer_defaults(desc) }
 }
+#[inline]
 pub fn query_image_defaults(desc: &ImageDesc) -> ImageDesc {
     unsafe { ffi::sg_query_image_defaults(desc) }
 }
+#[inline]
 pub fn query_shader_defaults(desc: &ShaderDesc) -> ShaderDesc {
     unsafe { ffi::sg_query_shader_defaults(desc) }
 }
+#[inline]
 pub fn query_pipeline_defaults(desc: &PipelineDesc) -> PipelineDesc {
     unsafe { ffi::sg_query_pipeline_defaults(desc) }
 }
+#[inline]
 pub fn query_pass_defaults(desc: &PassDesc) -> PassDesc {
     unsafe { ffi::sg_query_pass_defaults(desc) }
 }
+#[inline]
 pub fn alloc_buffer() -> Buffer {
     unsafe { ffi::sg_alloc_buffer() }
 }
+#[inline]
 pub fn alloc_image() -> Image {
     unsafe { ffi::sg_alloc_image() }
 }
+#[inline]
 pub fn alloc_shader() -> Shader {
     unsafe { ffi::sg_alloc_shader() }
 }
+#[inline]
 pub fn alloc_pipeline() -> Pipeline {
     unsafe { ffi::sg_alloc_pipeline() }
 }
+#[inline]
 pub fn alloc_pass() -> Pass {
     unsafe { ffi::sg_alloc_pass() }
 }
+#[inline]
 pub fn dealloc_buffer(buf: Buffer) {
     unsafe { ffi::sg_dealloc_buffer(buf) }
 }
+#[inline]
 pub fn dealloc_image(img: Image) {
     unsafe { ffi::sg_dealloc_image(img) }
 }
+#[inline]
 pub fn dealloc_shader(shd: Shader) {
     unsafe { ffi::sg_dealloc_shader(shd) }
 }
+#[inline]
 pub fn dealloc_pipeline(pip: Pipeline) {
     unsafe { ffi::sg_dealloc_pipeline(pip) }
 }
+#[inline]
 pub fn dealloc_pass(pass: Pass) {
     unsafe { ffi::sg_dealloc_pass(pass) }
 }
+#[inline]
 pub fn init_buffer(buf: Buffer, desc: &BufferDesc) {
     unsafe { ffi::sg_init_buffer(buf, desc) }
 }
+#[inline]
 pub fn init_image(img: Image, desc: &ImageDesc) {
     unsafe { ffi::sg_init_image(img, desc) }
 }
+#[inline]
 pub fn init_shader(shd: Shader, desc: &ShaderDesc) {
     unsafe { ffi::sg_init_shader(shd, desc) }
 }
+#[inline]
 pub fn init_pipeline(pip: Pipeline, desc: &PipelineDesc) {
     unsafe { ffi::sg_init_pipeline(pip, desc) }
 }
+#[inline]
 pub fn init_pass(pass: Pass, desc: &PassDesc) {
     unsafe { ffi::sg_init_pass(pass, desc) }
 }
+#[inline]
 pub fn uninit_buffer(buf: Buffer) {
     unsafe { ffi::sg_uninit_buffer(buf) }
 }
+#[inline]
 pub fn uninit_image(img: Image) {
     unsafe { ffi::sg_uninit_image(img) }
 }
+#[inline]
 pub fn uninit_shader(shd: Shader) {
     unsafe { ffi::sg_uninit_shader(shd) }
 }
+#[inline]
 pub fn uninit_pipeline(pip: Pipeline) {
     unsafe { ffi::sg_uninit_pipeline(pip) }
 }
+#[inline]
 pub fn uninit_pass(pass: Pass) {
     unsafe { ffi::sg_uninit_pass(pass) }
 }
+#[inline]
 pub fn fail_buffer(buf: Buffer) {
     unsafe { ffi::sg_fail_buffer(buf) }
 }
+#[inline]
 pub fn fail_image(img: Image) {
     unsafe { ffi::sg_fail_image(img) }
 }
+#[inline]
 pub fn fail_shader(shd: Shader) {
     unsafe { ffi::sg_fail_shader(shd) }
 }
+#[inline]
 pub fn fail_pipeline(pip: Pipeline) {
     unsafe { ffi::sg_fail_pipeline(pip) }
 }
+#[inline]
 pub fn fail_pass(pass: Pass) {
     unsafe { ffi::sg_fail_pass(pass) }
 }
+#[inline]
 pub fn setup_context() -> Context {
     unsafe { ffi::sg_setup_context() }
 }
+#[inline]
 pub fn activate_context(ctx_id: Context) {
     unsafe { ffi::sg_activate_context(ctx_id) }
 }
+#[inline]
 pub fn discard_context(ctx_id: Context) {
     unsafe { ffi::sg_discard_context(ctx_id) }
 }
+#[inline]
 pub fn d3d11_device() -> *const core::ffi::c_void {
     unsafe { ffi::sg_d3d11_device() }
 }
+#[inline]
 pub fn mtl_device() -> *const core::ffi::c_void {
     unsafe { ffi::sg_mtl_device() }
 }
+#[inline]
 pub fn mtl_render_command_encoder() -> *const core::ffi::c_void {
     unsafe { ffi::sg_mtl_render_command_encoder() }
 }
