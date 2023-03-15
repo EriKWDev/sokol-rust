@@ -8,6 +8,71 @@ Add `sokol-rust` as a dependency to your `Cargo.toml` as such:
 sokol = { version="*", git="https://github.com/ErikWDev/sokol-rust.git" }
 ```
 
+Check out the `examples/` folder for more examples. Here is `examples/clear/clear.rs`:
+```rust
+use sokol::app as sapp;
+use sokol::gfx as sg;
+
+struct State {
+    pass_action: sg::PassAction,
+}
+
+static mut STATE: State = State {
+    pass_action: sg::PassAction::new(),
+};
+
+extern "C" fn init() {
+    let state = unsafe { &mut STATE };
+
+    sg::setup(&sg::Desc {
+        context: sokol::glue::context(),
+        ..Default::default()
+    });
+
+    state.pass_action.colors[0] = sg::ColorAttachmentAction {
+        action: sg::Action::Clear,
+        value: sg::Color { r: 1.0, g: 0.0, b: 0.0, a: 1.0 },
+        ..Default::default()
+    };
+}
+
+extern "C" fn frame() {
+    let state = unsafe { &mut STATE };
+
+    let g = state.pass_action.colors[0].value.g + 0.01;
+    state.pass_action.colors[0].value.g = if g > 1.0 { 0.0 } else { g };
+
+    let (width, height) = (sapp::width(), sapp::height());
+
+    sg::begin_default_pass(&state.pass_action, width, height);
+    sg::end_pass();
+    sg::commit();
+}
+
+extern "C" fn cleanup() {
+    sg::shutdown()
+}
+
+fn main() {
+    let window_title = b"clear\0".as_ptr() as _;
+
+    sapp::run(&sapp::Desc {
+        init_cb: Some(init),
+        cleanup_cb: Some(cleanup),
+        frame_cb: Some(frame),
+        window_title,
+        width: 800,
+        height: 600,
+        sample_count: 4,
+        icon: sapp::IconDesc {
+            sokol_default: true,
+            ..Default::default()
+        },
+        ..Default::default()
+    });
+}
+```
+
 ## Updating the bindings
 To update, place the `gen_rust.py` script inside `sokol/bindgen` and clone this repository inside there. 
 Inside `gen_all.py`, import `gen_rust` like the other bindgens and call it's `gen` function the exact and
