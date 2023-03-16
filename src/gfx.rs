@@ -182,7 +182,7 @@ impl Default for Color {
         Self::new()
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(i32)]
 pub enum Backend {
     Glcore33,
@@ -205,7 +205,7 @@ impl Default for Backend {
         Self::Glcore33
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum PixelFormat {
     Default,
@@ -375,7 +375,7 @@ impl Default for Limits {
         Self::new()
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum ResourceState {
     Initial,
@@ -394,7 +394,7 @@ impl Default for ResourceState {
         Self::Initial
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum Usage {
     Default,
@@ -413,7 +413,7 @@ impl Default for Usage {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum BufferType {
     Default,
@@ -431,7 +431,7 @@ impl Default for BufferType {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum IndexType {
     Default,
@@ -450,7 +450,7 @@ impl Default for IndexType {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum ImageType {
     Default,
@@ -470,7 +470,7 @@ impl Default for ImageType {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(i32)]
 pub enum SamplerType {
     Default,
@@ -488,7 +488,7 @@ impl Default for SamplerType {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum CubeFace {
     PosX,
@@ -509,7 +509,7 @@ impl Default for CubeFace {
         Self::PosX
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum ShaderStage {
     Vs,
@@ -525,7 +525,7 @@ impl Default for ShaderStage {
         Self::Vs
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum PrimitiveType {
     Default,
@@ -546,7 +546,7 @@ impl Default for PrimitiveType {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum Filter {
     Default,
@@ -568,7 +568,7 @@ impl Default for Filter {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum Wrap {
     Default,
@@ -588,7 +588,7 @@ impl Default for Wrap {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum BorderColor {
     Default,
@@ -607,7 +607,7 @@ impl Default for BorderColor {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum VertexFormat {
     Invalid,
@@ -640,7 +640,7 @@ impl Default for VertexFormat {
         Self::Invalid
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum VertexStep {
     Default,
@@ -658,7 +658,7 @@ impl Default for VertexStep {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum UniformType {
     Invalid,
@@ -683,7 +683,7 @@ impl Default for UniformType {
         Self::Invalid
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum UniformLayout {
     Default,
@@ -701,7 +701,7 @@ impl Default for UniformLayout {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum CullMode {
     Default,
@@ -720,7 +720,7 @@ impl Default for CullMode {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum FaceWinding {
     Default,
@@ -738,7 +738,7 @@ impl Default for FaceWinding {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum CompareFunc {
     Default,
@@ -762,7 +762,7 @@ impl Default for CompareFunc {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum StencilOp {
     Default,
@@ -786,7 +786,7 @@ impl Default for StencilOp {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum BlendFactor {
     Default,
@@ -817,7 +817,7 @@ impl Default for BlendFactor {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum BlendOp {
     Default,
@@ -836,7 +836,7 @@ impl Default for BlendOp {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum ColorMask {
     Default = 0,
@@ -867,7 +867,7 @@ impl Default for ColorMask {
         Self::Default
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum Action {
     Default,
@@ -1806,7 +1806,7 @@ impl Default for PassInfo {
         Self::new()
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(i32)]
 pub enum LogItem {
     Ok,

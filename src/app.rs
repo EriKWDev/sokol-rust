@@ -43,7 +43,7 @@ pub const SAPP_MAX_TOUCHPOINTS: usize = 8;
 pub const SAPP_MAX_MOUSEBUTTONS: usize = 3;
 pub const SAPP_MAX_KEYCODES: usize = 512;
 pub const SAPP_MAX_ICONIMAGES: usize = 8;
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum EventType {
     Invalid,
@@ -82,7 +82,7 @@ impl Default for EventType {
         Self::Invalid
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(i32)]
 pub enum Keycode {
     Invalid = 0,
@@ -217,7 +217,7 @@ impl Default for Keycode {
         Self::Invalid
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(i32)]
 pub enum AndroidTooltype {
     Unknown = 0,
@@ -260,7 +260,7 @@ impl Default for Touchpoint {
         Self::new()
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(i32)]
 pub enum Mousebutton {
     Left = 0,
@@ -418,7 +418,7 @@ impl Default for Allocator {
         Self::new()
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(i32)]
 pub enum LogItem {
     Ok,
@@ -636,7 +636,7 @@ impl Default for Desc {
         Self::new()
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(i32)]
 pub enum Html5FetchError {
     FetchErrorNoError,
@@ -703,7 +703,7 @@ impl Default for Html5FetchRequest {
         Self::new()
     }
 }
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(i32)]
 pub enum MouseCursor {
     Default = 0,

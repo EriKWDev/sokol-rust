@@ -11,7 +11,7 @@ fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str 
         .expect("c_char_ptr contained invalid Utf8 Data")
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(i32)]
 pub enum LogItem {
     Ok,

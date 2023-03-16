@@ -566,7 +566,7 @@ def gen_enum(decl, prefix):
             is_u32 = True
             break
 
-    l("#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]")
+    l("#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]")
     if is_u32:
         l("#[repr(u32)]")
     else:
