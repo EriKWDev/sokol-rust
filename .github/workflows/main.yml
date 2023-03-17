@@ -24,8 +24,10 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
       - uses: actions/checkout@v3
+        with:
+            submodules: recursive
 
-      - name: Install stable toolchain
+      - name: Install stable rust toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -38,8 +40,9 @@ jobs:
             sudo apt-get update
             sudo apt-get install libglu1-mesa-dev mesa-common-dev xorg-dev libasound-dev
 
-      - name: Run cargo build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --all-targets
+      - name: Run cargo build --all-targets
+        run: cargo build
+
+      - name: Run cargo build for imgui example
+        working-directory: ./examples/imgui
+        run: cargo build
