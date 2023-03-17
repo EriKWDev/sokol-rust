@@ -8,26 +8,10 @@ pub enum SokolBackend {
     Wgpu,
 }
 
-fn make_sokol() {
-    let mut build = cc::Build::new();
-    let tool = build.try_get_compiler().unwrap();
-
-    let debug_info_requested = std::env::var("SOKOL_DEBUG").ok().is_some();
-    let is_msvc = tool.is_like_msvc();
-    const BASE_C_DIR: &str = "src/sokol/c/";
-
-    let is_debug_build = cfg!(debug_assertions);
-    if !is_debug_build {
-        build.define("NDEBUG", None);
-        build.opt_level(2);
-    }
-
+fn select_sokol_backend(build: &mut cc::Build, is_msvc: bool) -> SokolBackend {
     let desired_backend = std::env::var("SOKOL_BACKEND")
         .ok()
         .unwrap_or("AUTO".to_owned());
-
-    let wayland_desired = std::env::var("SOKOL_WAYLAND").is_ok();
-    let force_egl = std::env::var("SOKOL_FORCE_EGL").is_ok();
 
     println!("cargo:rerun-if-env-changed=SOKOL_BACKEND");
     println!("cargo:rerun-if-env-changed=SOKOL_WAYLAND");
@@ -75,6 +59,28 @@ fn make_sokol() {
             build.define("SOKOL_WGPU", None);
         }
     }
+
+    backend
+}
+
+fn make_sokol() {
+    let mut build = cc::Build::new();
+    let tool = build.try_get_compiler().unwrap();
+
+    let debug_info_requested = std::env::var("SOKOL_DEBUG").ok().is_some();
+    let is_msvc = tool.is_like_msvc();
+    let wayland_desired = std::env::var("SOKOL_WAYLAND").is_ok();
+    let force_egl = std::env::var("SOKOL_FORCE_EGL").is_ok();
+
+    const BASE_C_DIR: &str = "src/sokol/c/";
+
+    let is_debug_build = cfg!(debug_assertions);
+    if !is_debug_build {
+        build.define("NDEBUG", None);
+        build.opt_level(2);
+    }
+
+    let backend = select_sokol_backend(&mut build, is_msvc);
 
     let files = [
         "sokol_log.c",
@@ -212,8 +218,59 @@ fn make_sokol() {
     build.compile("sokol-rust");
 }
 
+fn make_imgui() {
+    let mut build = cc::Build::new();
+    let tool = build.try_get_compiler().unwrap();
+
+    let debug_info_requested = std::env::var("SOKOL_DEBUG").ok().is_some();
+    let is_msvc = tool.is_like_msvc();
+    const BASE_C_DIR: &str = "src/sokol/c/";
+
+    let is_debug_build = cfg!(debug_assertions);
+    if !is_debug_build {
+        build.define("NDEBUG", None);
+        build.opt_level(2);
+    }
+
+    let _backend = select_sokol_backend(&mut build, is_msvc);
+
+    let files = ["sokol_imgui.c", "sokol_gfx_imgui.c"];
+
+    //
+    // include paths
+    //
+    build.include(BASE_C_DIR);
+    build.define("IMPL", None);
+
+    //
+    // silence some warnings
+    //
+    build.flag_if_supported("-Wno-unused-parameter");
+    build.flag_if_supported("-Wno-missing-field-initializers");
+
+    for file in &files {
+        let file = format!("{BASE_C_DIR}{file}");
+
+        println!("cargo:rerun-if-changed={}", file);
+
+        if cfg!(target_os = "macos") {
+            build.flag("-ObjC");
+        }
+        build.file(file);
+    }
+
+    if debug_info_requested {
+        build.define("_DEBUG", None).define("SOKOL_DEBUG", None);
+    }
+
+    build.define("IMGUI_DISABLE_OBSOLETE_FUNCTIONS", None);
+
+    build.compile("sokol-rust-imgui");
+}
+
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
 
     make_sokol();
+    make_imgui();
 }

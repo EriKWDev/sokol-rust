@@ -1,6 +1,7 @@
 // machine generated, do not edit
 
 #![allow(dead_code)]
+#![allow(unused_imports)]
 
 /// Helper function to convert a C string to a rust string slice
 #[inline]

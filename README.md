@@ -118,6 +118,12 @@ cargo run --example blend
 cargo run --example userdata
 ```
 
+To run the imgui example, you need to go into it's directory:
+```console
+cd examples/imgui
+cargo run
+```
+
 ## Shaders
 Sokol's own shader compiler does not yet have support for generating helper files in rust, though they can quite easily
 be translated into rust manually as have been done for the examples. See `examples/mrt/shader.rs` or `examples/cube/shader.rs`

@@ -20,6 +20,8 @@ module_names = {
     "sdtx_": "debugtext",
     "sshape_": "shape",
     "sapp_sg": "glue",
+    "simgui_": "imgui",
+    "sg_imgui_": "gfx_imgui",
 }
 
 c_source_paths = {
@@ -32,6 +34,8 @@ c_source_paths = {
     "sdtx_": "sokol-rust/src/sokol/c/sokol_debugtext.c",
     "sshape_": "sokol-rust/src/sokol/c/sokol_shape.c",
     "sapp_sg": "sokol-rust/src/sokol/c/sokol_glue.c",
+    "simgui_": "sokol-rust/src/sokol/c/sokol_imgui.c",
+    "sg_imgui_": "sokol-rust/src/sokol/c/sokol_gfx_imgui.c",
 }
 
 ignores = [
@@ -150,6 +154,13 @@ def l(s):
 
 def as_rust_prim_type(s):
     return prim_types[s]
+
+
+def as_upper_snake_case(s, prefix):
+    outp = s.lower()
+    if outp.startswith(prefix):
+        outp = outp[len(prefix):]
+    return outp.upper()
 
 
 # prefix_bla_blub(_t) => (dep::)BlaBlub
@@ -548,9 +559,9 @@ def gen_consts(decl, prefix):
         item_name = check_override(item["name"])
         if item_name in special_constant_types:
             special_type = special_constant_types[item_name]
-            l(f"pub const {util.as_upper_snake_case(item_name, prefix)}: {special_type} = {item['value']};")
+            l(f"pub const {as_upper_snake_case(item_name, prefix)}: {special_type} = {item['value']};")
         else:
-            l(f"pub const {util.as_upper_snake_case(item_name, prefix)}: usize = {item['value']};")
+            l(f"pub const {as_upper_snake_case(item_name, prefix)}: usize = {item['value']};")
 
 
 def gen_enum(decl, prefix):
@@ -760,6 +771,7 @@ def gen_module(inp, dep_prefixes):
     l("// machine generated, do not edit")
     l("")
     l("#![allow(dead_code)]")
+    l("#![allow(unused_imports)]")
     l("")
     gen_imports(inp, dep_prefixes)
     gen_helpers(inp)

@@ -1,6 +1,7 @@
 // machine generated, do not edit
 
 #![allow(dead_code)]
+#![allow(unused_imports)]
 
 /// Helper function to convert a C string to a rust string slice
 #[inline]
@@ -39,10 +40,10 @@ impl<T> From<&T> for Range {
     }
 }
 
-pub const SAPP_MAX_TOUCHPOINTS: usize = 8;
-pub const SAPP_MAX_MOUSEBUTTONS: usize = 3;
-pub const SAPP_MAX_KEYCODES: usize = 512;
-pub const SAPP_MAX_ICONIMAGES: usize = 8;
+pub const MAX_TOUCHPOINTS: usize = 8;
+pub const MAX_MOUSEBUTTONS: usize = 3;
+pub const MAX_KEYCODES: usize = 512;
+pub const MAX_ICONIMAGES: usize = 8;
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u32)]
 pub enum EventType {
@@ -278,13 +279,13 @@ impl Default for Mousebutton {
         Self::Left
     }
 }
-pub const SAPP_MODIFIER_SHIFT: usize = 1;
-pub const SAPP_MODIFIER_CTRL: usize = 2;
-pub const SAPP_MODIFIER_ALT: usize = 4;
-pub const SAPP_MODIFIER_SUPER: usize = 8;
-pub const SAPP_MODIFIER_LMB: usize = 256;
-pub const SAPP_MODIFIER_RMB: usize = 512;
-pub const SAPP_MODIFIER_MMB: usize = 1024;
+pub const MODIFIER_SHIFT: usize = 1;
+pub const MODIFIER_CTRL: usize = 2;
+pub const MODIFIER_ALT: usize = 4;
+pub const MODIFIER_SUPER: usize = 8;
+pub const MODIFIER_LMB: usize = 256;
+pub const MODIFIER_RMB: usize = 512;
+pub const MODIFIER_MMB: usize = 1024;
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct Event {

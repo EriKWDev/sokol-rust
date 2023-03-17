@@ -17,11 +17,5 @@ fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str 
 pub mod ffi {
     #![allow(unused_imports)]
     use super::*;
-    extern "C" {
-        pub fn sapp_sgcontext() -> sg::ContextDesc;
-    }
-}
-#[inline]
-pub fn context() -> sg::ContextDesc {
-    unsafe { ffi::sapp_sgcontext() }
+    extern "C" {}
 }

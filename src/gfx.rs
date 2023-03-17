@@ -1,6 +1,7 @@
 // machine generated, do not edit
 
 #![allow(dead_code)]
+#![allow(unused_imports)]
 
 /// Helper function to convert a C string to a rust string slice
 #[inline]
@@ -148,17 +149,17 @@ impl Default for Range {
         Self::new()
     }
 }
-pub const SG_INVALID_ID: u32 = 0;
-pub const SG_NUM_SHADER_STAGES: usize = 2;
-pub const SG_NUM_INFLIGHT_FRAMES: usize = 2;
-pub const SG_MAX_COLOR_ATTACHMENTS: usize = 4;
-pub const SG_MAX_SHADERSTAGE_BUFFERS: usize = 8;
-pub const SG_MAX_SHADERSTAGE_IMAGES: usize = 12;
-pub const SG_MAX_SHADERSTAGE_UBS: usize = 4;
-pub const SG_MAX_UB_MEMBERS: usize = 16;
-pub const SG_MAX_VERTEX_ATTRIBUTES: usize = 16;
-pub const SG_MAX_MIPMAPS: usize = 16;
-pub const SG_MAX_TEXTUREARRAY_LAYERS: usize = 128;
+pub const INVALID_ID: u32 = 0;
+pub const NUM_SHADER_STAGES: usize = 2;
+pub const NUM_INFLIGHT_FRAMES: usize = 2;
+pub const MAX_COLOR_ATTACHMENTS: usize = 4;
+pub const MAX_SHADERSTAGE_BUFFERS: usize = 8;
+pub const MAX_SHADERSTAGE_IMAGES: usize = 12;
+pub const MAX_SHADERSTAGE_UBS: usize = 4;
+pub const MAX_UB_MEMBERS: usize = 16;
+pub const MAX_VERTEX_ATTRIBUTES: usize = 16;
+pub const MAX_MIPMAPS: usize = 16;
+pub const MAX_TEXTUREARRAY_LAYERS: usize = 128;
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct Color {
