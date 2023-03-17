@@ -51,3 +51,7 @@ path = "examples/audio/audio.rs"
 [[example]]
 name = "instancing"
 path = "examples/instancing/instancing.rs"
+
+[[example]]
+name = "texcube"
+path = "examples/texcube/texcube.rs"
