@@ -5,6 +5,10 @@ edition = "2021"
 authors = ["Erik W. Gren <ErikWDev@gmail.com>"]
 build = "build.rs"
 
+[features]
+default = []
+imgui = []
+
 [build-dependencies]
 cc = { version = "1.0", features = ["parallel"] }
 

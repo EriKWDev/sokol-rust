@@ -1,3 +1,4 @@
+//! To use this module, enable the feature "imgui"
 // machine generated, do not edit
 
 #![allow(dead_code)]

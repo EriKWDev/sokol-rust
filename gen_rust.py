@@ -24,6 +24,11 @@ module_names = {
     "sg_imgui_": "gfx_imgui",
 }
 
+module_requires_rust_feature = {
+    module_names["simgui_"]: "imgui",
+    module_names["sg_imgui_"]: "imgui",
+}
+
 c_source_paths = {
     "slog_": "sokol-rust/src/sokol/c/sokol_log.c",
     "sg_": "sokol-rust/src/sokol/c/sokol_gfx.c",
@@ -124,6 +129,7 @@ prim_defaults = {
     "uintptr_t": "0",
     "intptr_t": "0",
     "size_t": "0",
+    "char": "'\0'",
 }
 
 special_constant_types = {
@@ -179,6 +185,7 @@ def as_rust_enum_type(s, prefix):
     parts = s.lower().split("_")
     outp = "" if s.startswith(prefix) else f"{parts[0]}::"
     for part in parts[1:]:
+        # ignore '_t' type postfix
         if part != "t":
             outp += part.capitalize()
     return outp
@@ -768,8 +775,15 @@ def gen_helpers(inp):
 
 
 def gen_module(inp, dep_prefixes):
+    module = inp['module']
+    if module in module_requires_rust_feature:
+        feature = module_requires_rust_feature[module]
+        l(f"//! To use this module, enable the feature \"{feature}\"")
+
     l("// machine generated, do not edit")
     l("")
+
+    
     l("#![allow(dead_code)]")
     l("#![allow(unused_imports)]")
     l("")
@@ -803,6 +817,7 @@ def prepare():
         os.makedirs("sokol-rust/src/sokol")
     if not os.path.isdir("sokol-rust/src/sokol/c"):
         os.makedirs("sokol-rust/src/sokol/c")
+
     with open("sokol-rust/src/lib.rs", "w", newline="\n") as f_outp:
         f_outp.write("//! Automatically generated sokol bindings for Rust\n\n")
 
@@ -825,4 +840,9 @@ def gen(c_header_path, c_prefix, dep_c_prefixes):
         f_outp.write(out_lines)
 
     with open("sokol-rust/src/lib.rs", "a", newline="\n") as f_outp:
-        f_outp.write(f"pub mod {ir['module']};\n")
+        module = ir['module']
+        if module in module_requires_rust_feature:
+            feature = module_requires_rust_feature[module]
+            f_outp.write(f"/// Enable feature \"{feature}\" to use\n")
+            f_outp.write(f"#[cfg(feature=\"{feature}\")]\n")
+        f_outp.write(f"pub mod {module};\n")

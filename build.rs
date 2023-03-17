@@ -272,5 +272,7 @@ fn main() {
     println!("cargo:rerun-if-changed=build.rs");
 
     make_sokol();
+
+    #[cfg(feature = "imgui")]
     make_imgui();
 }
