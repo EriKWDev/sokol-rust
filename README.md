@@ -115,6 +115,8 @@ cargo run --example debugtext
 cargo run --example sgl-context
 cargo run --example sgl-points
 cargo run --example blend
+cargo run --example audio
+cargo run --example instancing
 cargo run --example userdata
 ```
 
