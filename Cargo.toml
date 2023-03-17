@@ -47,3 +47,7 @@ path = "examples/blend/blend.rs"
 [[example]]
 name = "audio"
 path = "examples/audio/audio.rs"
+
+[[example]]
+name = "instancing"
+path = "examples/instancing/instancing.rs"

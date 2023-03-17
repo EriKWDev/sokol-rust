@@ -145,13 +145,22 @@ case SOKOL_RUST:    return "sokol_rust";
 else if (str == "sokol_rust") {
     return SOKOL_RUST;
 }
+// ..
+struct sokolrust_t {
+    static errmsg_t gen(const args_t& args, const input_t& inp, const std::array<spirvcross_t,slang_t::NUM>& spirvcross, const std::array<bytecode_t,slang_t::NUM>& bytecode);
+};
+// ..
+namespace util {
+    // ..
+    std::string to_upper_case(const std::string& str);
+    // ..
+};
+
 
 // .. in util.cc, add a simple helper function
 std::string to_upper_case(const std::string& str) {
     return pystring::upper(str);
 }
-// .. and declare it in shdc.h's namespace util { .. }
-std::string to_upper_case(const std::string& str);
 ```
 3. Re-compile the shader compiler and use it like normal but now with `-f sokol_rust`
 
