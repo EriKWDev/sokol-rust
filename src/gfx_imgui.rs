@@ -10,9 +10,7 @@ use crate::gfx as sg;
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str
-        .to_str()
-        .expect("c_char_ptr contained invalid Utf8 Data")
+    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
 }
 
 #[repr(C)]
@@ -39,11 +37,7 @@ pub struct ImguiBuffer {
 }
 impl ImguiBuffer {
     pub const fn new() -> Self {
-        Self {
-            res_id: sg::Buffer::new(),
-            label: ImguiStr::new(),
-            desc: sg::BufferDesc::new(),
-        }
+        Self { res_id: sg::Buffer::new(), label: ImguiStr::new(), desc: sg::BufferDesc::new() }
     }
 }
 impl Default for ImguiBuffer {
@@ -358,9 +352,7 @@ pub struct ImguiArgsMakeBuffer {
 }
 impl ImguiArgsMakeBuffer {
     pub const fn new() -> Self {
-        Self {
-            result: sg::Buffer::new(),
-        }
+        Self { result: sg::Buffer::new() }
     }
 }
 impl Default for ImguiArgsMakeBuffer {
@@ -375,9 +367,7 @@ pub struct ImguiArgsMakeImage {
 }
 impl ImguiArgsMakeImage {
     pub const fn new() -> Self {
-        Self {
-            result: sg::Image::new(),
-        }
+        Self { result: sg::Image::new() }
     }
 }
 impl Default for ImguiArgsMakeImage {
@@ -392,9 +382,7 @@ pub struct ImguiArgsMakeShader {
 }
 impl ImguiArgsMakeShader {
     pub const fn new() -> Self {
-        Self {
-            result: sg::Shader::new(),
-        }
+        Self { result: sg::Shader::new() }
     }
 }
 impl Default for ImguiArgsMakeShader {
@@ -409,9 +397,7 @@ pub struct ImguiArgsMakePipeline {
 }
 impl ImguiArgsMakePipeline {
     pub const fn new() -> Self {
-        Self {
-            result: sg::Pipeline::new(),
-        }
+        Self { result: sg::Pipeline::new() }
     }
 }
 impl Default for ImguiArgsMakePipeline {
@@ -426,9 +412,7 @@ pub struct ImguiArgsMakePass {
 }
 impl ImguiArgsMakePass {
     pub const fn new() -> Self {
-        Self {
-            result: sg::Pass::new(),
-        }
+        Self { result: sg::Pass::new() }
     }
 }
 impl Default for ImguiArgsMakePass {
@@ -443,9 +427,7 @@ pub struct ImguiArgsDestroyBuffer {
 }
 impl ImguiArgsDestroyBuffer {
     pub const fn new() -> Self {
-        Self {
-            buffer: sg::Buffer::new(),
-        }
+        Self { buffer: sg::Buffer::new() }
     }
 }
 impl Default for ImguiArgsDestroyBuffer {
@@ -460,9 +442,7 @@ pub struct ImguiArgsDestroyImage {
 }
 impl ImguiArgsDestroyImage {
     pub const fn new() -> Self {
-        Self {
-            image: sg::Image::new(),
-        }
+        Self { image: sg::Image::new() }
     }
 }
 impl Default for ImguiArgsDestroyImage {
@@ -477,9 +457,7 @@ pub struct ImguiArgsDestroyShader {
 }
 impl ImguiArgsDestroyShader {
     pub const fn new() -> Self {
-        Self {
-            shader: sg::Shader::new(),
-        }
+        Self { shader: sg::Shader::new() }
     }
 }
 impl Default for ImguiArgsDestroyShader {
@@ -494,9 +472,7 @@ pub struct ImguiArgsDestroyPipeline {
 }
 impl ImguiArgsDestroyPipeline {
     pub const fn new() -> Self {
-        Self {
-            pipeline: sg::Pipeline::new(),
-        }
+        Self { pipeline: sg::Pipeline::new() }
     }
 }
 impl Default for ImguiArgsDestroyPipeline {
@@ -511,9 +487,7 @@ pub struct ImguiArgsDestroyPass {
 }
 impl ImguiArgsDestroyPass {
     pub const fn new() -> Self {
-        Self {
-            pass: sg::Pass::new(),
-        }
+        Self { pass: sg::Pass::new() }
     }
 }
 impl Default for ImguiArgsDestroyPass {
@@ -529,10 +503,7 @@ pub struct ImguiArgsUpdateBuffer {
 }
 impl ImguiArgsUpdateBuffer {
     pub const fn new() -> Self {
-        Self {
-            buffer: sg::Buffer::new(),
-            data_size: 0,
-        }
+        Self { buffer: sg::Buffer::new(), data_size: 0 }
     }
 }
 impl Default for ImguiArgsUpdateBuffer {
@@ -547,9 +518,7 @@ pub struct ImguiArgsUpdateImage {
 }
 impl ImguiArgsUpdateImage {
     pub const fn new() -> Self {
-        Self {
-            image: sg::Image::new(),
-        }
+        Self { image: sg::Image::new() }
     }
 }
 impl Default for ImguiArgsUpdateImage {
@@ -566,11 +535,7 @@ pub struct ImguiArgsAppendBuffer {
 }
 impl ImguiArgsAppendBuffer {
     pub const fn new() -> Self {
-        Self {
-            buffer: sg::Buffer::new(),
-            data_size: 0,
-            result: 0,
-        }
+        Self { buffer: sg::Buffer::new(), data_size: 0, result: 0 }
     }
 }
 impl Default for ImguiArgsAppendBuffer {
@@ -587,11 +552,7 @@ pub struct ImguiArgsBeginDefaultPass {
 }
 impl ImguiArgsBeginDefaultPass {
     pub const fn new() -> Self {
-        Self {
-            action: sg::PassAction::new(),
-            width: 0,
-            height: 0,
-        }
+        Self { action: sg::PassAction::new(), width: 0, height: 0 }
     }
 }
 impl Default for ImguiArgsBeginDefaultPass {
@@ -607,10 +568,7 @@ pub struct ImguiArgsBeginPass {
 }
 impl ImguiArgsBeginPass {
     pub const fn new() -> Self {
-        Self {
-            pass: sg::Pass::new(),
-            action: sg::PassAction::new(),
-        }
+        Self { pass: sg::Pass::new(), action: sg::PassAction::new() }
     }
 }
 impl Default for ImguiArgsBeginPass {
@@ -629,13 +587,7 @@ pub struct ImguiArgsApplyViewport {
 }
 impl ImguiArgsApplyViewport {
     pub const fn new() -> Self {
-        Self {
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0,
-            origin_top_left: false,
-        }
+        Self { x: 0, y: 0, width: 0, height: 0, origin_top_left: false }
     }
 }
 impl Default for ImguiArgsApplyViewport {
@@ -654,13 +606,7 @@ pub struct ImguiArgsApplyScissorRect {
 }
 impl ImguiArgsApplyScissorRect {
     pub const fn new() -> Self {
-        Self {
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0,
-            origin_top_left: false,
-        }
+        Self { x: 0, y: 0, width: 0, height: 0, origin_top_left: false }
     }
 }
 impl Default for ImguiArgsApplyScissorRect {
@@ -675,9 +621,7 @@ pub struct ImguiArgsApplyPipeline {
 }
 impl ImguiArgsApplyPipeline {
     pub const fn new() -> Self {
-        Self {
-            pipeline: sg::Pipeline::new(),
-        }
+        Self { pipeline: sg::Pipeline::new() }
     }
 }
 impl Default for ImguiArgsApplyPipeline {
@@ -692,9 +636,7 @@ pub struct ImguiArgsApplyBindings {
 }
 impl ImguiArgsApplyBindings {
     pub const fn new() -> Self {
-        Self {
-            bindings: sg::Bindings::new(),
-        }
+        Self { bindings: sg::Bindings::new() }
     }
 }
 impl Default for ImguiArgsApplyBindings {
@@ -736,11 +678,7 @@ pub struct ImguiArgsDraw {
 }
 impl ImguiArgsDraw {
     pub const fn new() -> Self {
-        Self {
-            base_element: 0,
-            num_elements: 0,
-            num_instances: 0,
-        }
+        Self { base_element: 0, num_elements: 0, num_instances: 0 }
     }
 }
 impl Default for ImguiArgsDraw {
@@ -755,9 +693,7 @@ pub struct ImguiArgsAllocBuffer {
 }
 impl ImguiArgsAllocBuffer {
     pub const fn new() -> Self {
-        Self {
-            result: sg::Buffer::new(),
-        }
+        Self { result: sg::Buffer::new() }
     }
 }
 impl Default for ImguiArgsAllocBuffer {
@@ -772,9 +708,7 @@ pub struct ImguiArgsAllocImage {
 }
 impl ImguiArgsAllocImage {
     pub const fn new() -> Self {
-        Self {
-            result: sg::Image::new(),
-        }
+        Self { result: sg::Image::new() }
     }
 }
 impl Default for ImguiArgsAllocImage {
@@ -789,9 +723,7 @@ pub struct ImguiArgsAllocShader {
 }
 impl ImguiArgsAllocShader {
     pub const fn new() -> Self {
-        Self {
-            result: sg::Shader::new(),
-        }
+        Self { result: sg::Shader::new() }
     }
 }
 impl Default for ImguiArgsAllocShader {
@@ -806,9 +738,7 @@ pub struct ImguiArgsAllocPipeline {
 }
 impl ImguiArgsAllocPipeline {
     pub const fn new() -> Self {
-        Self {
-            result: sg::Pipeline::new(),
-        }
+        Self { result: sg::Pipeline::new() }
     }
 }
 impl Default for ImguiArgsAllocPipeline {
@@ -823,9 +753,7 @@ pub struct ImguiArgsAllocPass {
 }
 impl ImguiArgsAllocPass {
     pub const fn new() -> Self {
-        Self {
-            result: sg::Pass::new(),
-        }
+        Self { result: sg::Pass::new() }
     }
 }
 impl Default for ImguiArgsAllocPass {
@@ -840,9 +768,7 @@ pub struct ImguiArgsDeallocBuffer {
 }
 impl ImguiArgsDeallocBuffer {
     pub const fn new() -> Self {
-        Self {
-            buffer: sg::Buffer::new(),
-        }
+        Self { buffer: sg::Buffer::new() }
     }
 }
 impl Default for ImguiArgsDeallocBuffer {
@@ -857,9 +783,7 @@ pub struct ImguiArgsDeallocImage {
 }
 impl ImguiArgsDeallocImage {
     pub const fn new() -> Self {
-        Self {
-            image: sg::Image::new(),
-        }
+        Self { image: sg::Image::new() }
     }
 }
 impl Default for ImguiArgsDeallocImage {
@@ -874,9 +798,7 @@ pub struct ImguiArgsDeallocShader {
 }
 impl ImguiArgsDeallocShader {
     pub const fn new() -> Self {
-        Self {
-            shader: sg::Shader::new(),
-        }
+        Self { shader: sg::Shader::new() }
     }
 }
 impl Default for ImguiArgsDeallocShader {
@@ -891,9 +813,7 @@ pub struct ImguiArgsDeallocPipeline {
 }
 impl ImguiArgsDeallocPipeline {
     pub const fn new() -> Self {
-        Self {
-            pipeline: sg::Pipeline::new(),
-        }
+        Self { pipeline: sg::Pipeline::new() }
     }
 }
 impl Default for ImguiArgsDeallocPipeline {
@@ -908,9 +828,7 @@ pub struct ImguiArgsDeallocPass {
 }
 impl ImguiArgsDeallocPass {
     pub const fn new() -> Self {
-        Self {
-            pass: sg::Pass::new(),
-        }
+        Self { pass: sg::Pass::new() }
     }
 }
 impl Default for ImguiArgsDeallocPass {
@@ -925,9 +843,7 @@ pub struct ImguiArgsInitBuffer {
 }
 impl ImguiArgsInitBuffer {
     pub const fn new() -> Self {
-        Self {
-            buffer: sg::Buffer::new(),
-        }
+        Self { buffer: sg::Buffer::new() }
     }
 }
 impl Default for ImguiArgsInitBuffer {
@@ -942,9 +858,7 @@ pub struct ImguiArgsInitImage {
 }
 impl ImguiArgsInitImage {
     pub const fn new() -> Self {
-        Self {
-            image: sg::Image::new(),
-        }
+        Self { image: sg::Image::new() }
     }
 }
 impl Default for ImguiArgsInitImage {
@@ -959,9 +873,7 @@ pub struct ImguiArgsInitShader {
 }
 impl ImguiArgsInitShader {
     pub const fn new() -> Self {
-        Self {
-            shader: sg::Shader::new(),
-        }
+        Self { shader: sg::Shader::new() }
     }
 }
 impl Default for ImguiArgsInitShader {
@@ -976,9 +888,7 @@ pub struct ImguiArgsInitPipeline {
 }
 impl ImguiArgsInitPipeline {
     pub const fn new() -> Self {
-        Self {
-            pipeline: sg::Pipeline::new(),
-        }
+        Self { pipeline: sg::Pipeline::new() }
     }
 }
 impl Default for ImguiArgsInitPipeline {
@@ -993,9 +903,7 @@ pub struct ImguiArgsInitPass {
 }
 impl ImguiArgsInitPass {
     pub const fn new() -> Self {
-        Self {
-            pass: sg::Pass::new(),
-        }
+        Self { pass: sg::Pass::new() }
     }
 }
 impl Default for ImguiArgsInitPass {
@@ -1010,9 +918,7 @@ pub struct ImguiArgsUninitBuffer {
 }
 impl ImguiArgsUninitBuffer {
     pub const fn new() -> Self {
-        Self {
-            buffer: sg::Buffer::new(),
-        }
+        Self { buffer: sg::Buffer::new() }
     }
 }
 impl Default for ImguiArgsUninitBuffer {
@@ -1027,9 +933,7 @@ pub struct ImguiArgsUninitImage {
 }
 impl ImguiArgsUninitImage {
     pub const fn new() -> Self {
-        Self {
-            image: sg::Image::new(),
-        }
+        Self { image: sg::Image::new() }
     }
 }
 impl Default for ImguiArgsUninitImage {
@@ -1044,9 +948,7 @@ pub struct ImguiArgsUninitShader {
 }
 impl ImguiArgsUninitShader {
     pub const fn new() -> Self {
-        Self {
-            shader: sg::Shader::new(),
-        }
+        Self { shader: sg::Shader::new() }
     }
 }
 impl Default for ImguiArgsUninitShader {
@@ -1061,9 +963,7 @@ pub struct ImguiArgsUninitPipeline {
 }
 impl ImguiArgsUninitPipeline {
     pub const fn new() -> Self {
-        Self {
-            pipeline: sg::Pipeline::new(),
-        }
+        Self { pipeline: sg::Pipeline::new() }
     }
 }
 impl Default for ImguiArgsUninitPipeline {
@@ -1078,9 +978,7 @@ pub struct ImguiArgsUninitPass {
 }
 impl ImguiArgsUninitPass {
     pub const fn new() -> Self {
-        Self {
-            pass: sg::Pass::new(),
-        }
+        Self { pass: sg::Pass::new() }
     }
 }
 impl Default for ImguiArgsUninitPass {
@@ -1095,9 +993,7 @@ pub struct ImguiArgsFailBuffer {
 }
 impl ImguiArgsFailBuffer {
     pub const fn new() -> Self {
-        Self {
-            buffer: sg::Buffer::new(),
-        }
+        Self { buffer: sg::Buffer::new() }
     }
 }
 impl Default for ImguiArgsFailBuffer {
@@ -1112,9 +1008,7 @@ pub struct ImguiArgsFailImage {
 }
 impl ImguiArgsFailImage {
     pub const fn new() -> Self {
-        Self {
-            image: sg::Image::new(),
-        }
+        Self { image: sg::Image::new() }
     }
 }
 impl Default for ImguiArgsFailImage {
@@ -1129,9 +1023,7 @@ pub struct ImguiArgsFailShader {
 }
 impl ImguiArgsFailShader {
     pub const fn new() -> Self {
-        Self {
-            shader: sg::Shader::new(),
-        }
+        Self { shader: sg::Shader::new() }
     }
 }
 impl Default for ImguiArgsFailShader {
@@ -1146,9 +1038,7 @@ pub struct ImguiArgsFailPipeline {
 }
 impl ImguiArgsFailPipeline {
     pub const fn new() -> Self {
-        Self {
-            pipeline: sg::Pipeline::new(),
-        }
+        Self { pipeline: sg::Pipeline::new() }
     }
 }
 impl Default for ImguiArgsFailPipeline {
@@ -1163,9 +1053,7 @@ pub struct ImguiArgsFailPass {
 }
 impl ImguiArgsFailPass {
     pub const fn new() -> Self {
-        Self {
-            pass: sg::Pass::new(),
-        }
+        Self { pass: sg::Pass::new() }
     }
 }
 impl Default for ImguiArgsFailPass {
@@ -1180,9 +1068,7 @@ pub struct ImguiArgsPushDebugGroup {
 }
 impl ImguiArgsPushDebugGroup {
     pub const fn new() -> Self {
-        Self {
-            name: ImguiStr::new(),
-        }
+        Self { name: ImguiStr::new() }
     }
 }
 impl Default for ImguiArgsPushDebugGroup {
@@ -1308,11 +1194,7 @@ pub struct ImguiCaptureItem {
 }
 impl ImguiCaptureItem {
     pub const fn new() -> Self {
-        Self {
-            cmd: ImguiCmd::new(),
-            color: 0,
-            args: ImguiArgs::new(),
-        }
+        Self { cmd: ImguiCmd::new(), color: 0, args: ImguiArgs::new() }
     }
 }
 impl Default for ImguiCaptureItem {
@@ -1392,11 +1274,7 @@ pub struct ImguiAllocator {
 }
 impl ImguiAllocator {
     pub const fn new() -> Self {
-        Self {
-            alloc: None,
-            free: None,
-            user_data: core::ptr::null_mut(),
-        }
+        Self { alloc: None, free: None, user_data: core::ptr::null_mut() }
     }
 }
 impl Default for ImguiAllocator {
@@ -1411,9 +1289,7 @@ pub struct ImguiDesc {
 }
 impl ImguiDesc {
     pub const fn new() -> Self {
-        Self {
-            allocator: ImguiAllocator::new(),
-        }
+        Self { allocator: ImguiAllocator::new() }
     }
 }
 impl Default for ImguiDesc {

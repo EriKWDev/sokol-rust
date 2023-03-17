@@ -11,9 +11,7 @@ pub enum SokolBackend {
 }
 
 fn select_sokol_backend(build: &mut cc::Build, is_msvc: bool) -> SokolBackend {
-    let desired_backend = std::env::var("SOKOL_BACKEND")
-        .ok()
-        .unwrap_or("AUTO".to_owned());
+    let desired_backend = std::env::var("SOKOL_BACKEND").ok().unwrap_or("AUTO".to_owned());
 
     println!("cargo:rerun-if-env-changed=SOKOL_BACKEND");
     println!("cargo:rerun-if-env-changed=SOKOL_WAYLAND");
@@ -29,7 +27,7 @@ fn select_sokol_backend(build: &mut cc::Build, is_msvc: bool) -> SokolBackend {
             } else {
                 SokolBackend::Gl
             }
-        }
+        },
 
         "D3D11" => SokolBackend::D3d11,
         "METAL" => SokolBackend::Metal,
@@ -44,22 +42,22 @@ fn select_sokol_backend(build: &mut cc::Build, is_msvc: bool) -> SokolBackend {
     match backend {
         SokolBackend::D3d11 => {
             build.define("SOKOL_D3D11", None);
-        }
+        },
         SokolBackend::Metal => {
             build.define("SOKOL_METAL", None);
-        }
+        },
         SokolBackend::Gles3 => {
             build.define("SOKOL_GLES3", None);
-        }
+        },
         SokolBackend::Gles2 => {
             build.define("SOKOL_GLES2", None);
-        }
+        },
         SokolBackend::Gl => {
             build.define("SOKOL_GLCORE33", None);
-        }
+        },
         SokolBackend::Wgpu => {
             build.define("SOKOL_WGPU", None);
-        }
+        },
     }
 
     backend
@@ -85,15 +83,8 @@ fn make_sokol() {
     let backend = select_sokol_backend(&mut build, is_msvc);
 
     let files = [
-        "sokol_log.c",
-        "sokol_app.c",
-        "sokol_gfx.c",
-        "sokol_glue.c",
-        "sokol_time.c",
-        "sokol_audio.c",
-        "sokol_gl.c",
-        "sokol_debugtext.c",
-        "sokol_shape.c",
+        "sokol_log.c", "sokol_app.c", "sokol_gfx.c", "sokol_glue.c", "sokol_time.c", "sokol_audio.c",
+        "sokol_gl.c", "sokol_debugtext.c", "sokol_shape.c",
     ];
 
     //

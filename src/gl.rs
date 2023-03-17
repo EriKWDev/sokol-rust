@@ -9,9 +9,7 @@ use crate::gfx as sg;
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str
-        .to_str()
-        .expect("c_char_ptr contained invalid Utf8 Data")
+    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -53,10 +51,7 @@ pub struct Logger {
 }
 impl Logger {
     pub const fn new() -> Self {
-        Self {
-            func: None,
-            user_data: core::ptr::null_mut(),
-        }
+        Self { func: None, user_data: core::ptr::null_mut() }
     }
 }
 impl Default for Logger {
@@ -149,11 +144,7 @@ pub struct Allocator {
 }
 impl Allocator {
     pub const fn new() -> Self {
-        Self {
-            alloc: None,
-            free: None,
-            user_data: core::ptr::null_mut(),
-        }
+        Self { alloc: None, free: None, user_data: core::ptr::null_mut() }
     }
 }
 impl Default for Allocator {
@@ -292,17 +283,7 @@ pub mod ffi {
         pub fn sgl_v2f_t2f_c1i(x: f32, y: f32, u: f32, v: f32, rgba: u32);
         pub fn sgl_v3f_t2f_c3f(x: f32, y: f32, z: f32, u: f32, v: f32, r: f32, g: f32, b: f32);
         pub fn sgl_v3f_t2f_c3b(x: f32, y: f32, z: f32, u: f32, v: f32, r: u8, g: u8, b: u8);
-        pub fn sgl_v3f_t2f_c4f(
-            x: f32,
-            y: f32,
-            z: f32,
-            u: f32,
-            v: f32,
-            r: f32,
-            g: f32,
-            b: f32,
-            a: f32,
-        );
+        pub fn sgl_v3f_t2f_c4f(x: f32, y: f32, z: f32, u: f32, v: f32, r: f32, g: f32, b: f32, a: f32);
         pub fn sgl_v3f_t2f_c4b(x: f32, y: f32, z: f32, u: f32, v: f32, r: u8, g: u8, b: u8, a: u8);
         pub fn sgl_v3f_t2f_c1i(x: f32, y: f32, z: f32, u: f32, v: f32, rgba: u32);
         pub fn sgl_end();
@@ -500,11 +481,7 @@ pub fn lookat(
     up_y: f32,
     up_z: f32,
 ) {
-    unsafe {
-        ffi::sgl_lookat(
-            eye_x, eye_y, eye_z, center_x, center_y, center_z, up_x, up_y, up_z,
-        )
-    }
+    unsafe { ffi::sgl_lookat(eye_x, eye_y, eye_z, center_x, center_y, center_z, up_x, up_y, up_z) }
 }
 #[inline]
 pub fn push_matrix() {

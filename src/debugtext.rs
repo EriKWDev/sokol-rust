@@ -9,24 +9,16 @@ use crate::gfx as sg;
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str
-        .to_str()
-        .expect("c_char_ptr contained invalid Utf8 Data")
+    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
 }
 
 /// Helper function to cast a rust slice into a sokol Range
 pub fn slice_as_range<T>(data: &[T]) -> Range {
-    Range {
-        size: data.len() * std::mem::size_of::<T>(),
-        ptr: data.as_ptr() as *const _,
-    }
+    Range { size: data.len() * std::mem::size_of::<T>(), ptr: data.as_ptr() as *const _ }
 }
 /// Helper function to cast a rust reference into a sokol Range
 pub fn value_as_range<T>(value: &T) -> Range {
-    Range {
-        size: std::mem::size_of::<T>(),
-        ptr: value as *const T as *const _,
-    }
+    Range { size: std::mem::size_of::<T>(), ptr: value as *const T as *const _ }
 }
 
 impl<T> From<&[T]> for Range {
@@ -80,10 +72,7 @@ pub struct Logger {
 }
 impl Logger {
     pub const fn new() -> Self {
-        Self {
-            func: None,
-            user_data: core::ptr::null_mut(),
-        }
+        Self { func: None, user_data: core::ptr::null_mut() }
     }
 }
 impl Default for Logger {
@@ -114,10 +103,7 @@ pub struct Range {
 }
 impl Range {
     pub const fn new() -> Self {
-        Self {
-            ptr: core::ptr::null(),
-            size: 0,
-        }
+        Self { ptr: core::ptr::null(), size: 0 }
     }
 }
 impl Default for Range {
@@ -134,11 +120,7 @@ pub struct FontDesc {
 }
 impl FontDesc {
     pub const fn new() -> Self {
-        Self {
-            data: Range::new(),
-            first_char: 0,
-            last_char: 0,
-        }
+        Self { data: Range::new(), first_char: 0, last_char: 0 }
     }
 }
 impl Default for FontDesc {
@@ -186,11 +168,7 @@ pub struct Allocator {
 }
 impl Allocator {
     pub const fn new() -> Self {
-        Self {
-            alloc: None,
-            free: None,
-            user_data: core::ptr::null_mut(),
-        }
+        Self { alloc: None, free: None, user_data: core::ptr::null_mut() }
     }
 }
 impl Default for Allocator {

@@ -7,24 +7,16 @@
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str
-        .to_str()
-        .expect("c_char_ptr contained invalid Utf8 Data")
+    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
 }
 
 /// Helper function to cast a rust slice into a sokol Range
 pub fn slice_as_range<T>(data: &[T]) -> Range {
-    Range {
-        size: data.len() * std::mem::size_of::<T>(),
-        ptr: data.as_ptr() as *const _,
-    }
+    Range { size: data.len() * std::mem::size_of::<T>(), ptr: data.as_ptr() as *const _ }
 }
 /// Helper function to cast a rust reference into a sokol Range
 pub fn value_as_range<T>(value: &T) -> Range {
-    Range {
-        size: std::mem::size_of::<T>(),
-        ptr: value as *const T as *const _,
-    }
+    Range { size: std::mem::size_of::<T>(), ptr: value as *const T as *const _ }
 }
 
 impl<T> From<&[T]> for Range {
@@ -138,10 +130,7 @@ pub struct Range {
 }
 impl Range {
     pub const fn new() -> Self {
-        Self {
-            ptr: core::ptr::null(),
-            size: 0,
-        }
+        Self { ptr: core::ptr::null(), size: 0 }
     }
 }
 impl Default for Range {
@@ -170,12 +159,7 @@ pub struct Color {
 }
 impl Color {
     pub const fn new() -> Self {
-        Self {
-            r: 0.0,
-            g: 0.0,
-            b: 0.0,
-            a: 0.0,
-        }
+        Self { r: 0.0, g: 0.0, b: 0.0, a: 0.0 }
     }
 }
 impl Default for Color {
@@ -895,10 +879,7 @@ pub struct ColorAttachmentAction {
 }
 impl ColorAttachmentAction {
     pub const fn new() -> Self {
-        Self {
-            action: Action::new(),
-            value: Color::new(),
-        }
+        Self { action: Action::new(), value: Color::new() }
     }
 }
 impl Default for ColorAttachmentAction {
@@ -914,10 +895,7 @@ pub struct DepthAttachmentAction {
 }
 impl DepthAttachmentAction {
     pub const fn new() -> Self {
-        Self {
-            action: Action::new(),
-            value: 0.0,
-        }
+        Self { action: Action::new(), value: 0.0 }
     }
 }
 impl Default for DepthAttachmentAction {
@@ -933,10 +911,7 @@ pub struct StencilAttachmentAction {
 }
 impl StencilAttachmentAction {
     pub const fn new() -> Self {
-        Self {
-            action: Action::new(),
-            value: 0,
-        }
+        Self { action: Action::new(), value: 0 }
     }
 }
 impl Default for StencilAttachmentAction {
@@ -1044,9 +1019,7 @@ pub struct ImageData {
 }
 impl ImageData {
     pub const fn new() -> Self {
-        Self {
-            subimage: [[Range::new(); 16]; 6],
-        }
+        Self { subimage: [[Range::new(); 16]; 6] }
     }
 }
 impl Default for ImageData {
@@ -1134,11 +1107,7 @@ pub struct ShaderAttrDesc {
 }
 impl ShaderAttrDesc {
     pub const fn new() -> Self {
-        Self {
-            name: core::ptr::null(),
-            sem_name: core::ptr::null(),
-            sem_index: 0,
-        }
+        Self { name: core::ptr::null(), sem_name: core::ptr::null(), sem_index: 0 }
     }
 }
 impl Default for ShaderAttrDesc {
@@ -1155,11 +1124,7 @@ pub struct ShaderUniformDesc {
 }
 impl ShaderUniformDesc {
     pub const fn new() -> Self {
-        Self {
-            name: core::ptr::null(),
-            _type: UniformType::new(),
-            array_count: 0,
-        }
+        Self { name: core::ptr::null(), _type: UniformType::new(), array_count: 0 }
     }
 }
 impl Default for ShaderUniformDesc {
@@ -1176,11 +1141,7 @@ pub struct ShaderUniformBlockDesc {
 }
 impl ShaderUniformBlockDesc {
     pub const fn new() -> Self {
-        Self {
-            size: 0,
-            layout: UniformLayout::new(),
-            uniforms: [ShaderUniformDesc::new(); 16],
-        }
+        Self { size: 0, layout: UniformLayout::new(), uniforms: [ShaderUniformDesc::new(); 16] }
     }
 }
 impl Default for ShaderUniformBlockDesc {
@@ -1272,11 +1233,7 @@ pub struct BufferLayoutDesc {
 }
 impl BufferLayoutDesc {
     pub const fn new() -> Self {
-        Self {
-            stride: 0,
-            step_func: VertexStep::new(),
-            step_rate: 0,
-        }
+        Self { stride: 0, step_func: VertexStep::new(), step_rate: 0 }
     }
 }
 impl Default for BufferLayoutDesc {
@@ -1293,11 +1250,7 @@ pub struct VertexAttrDesc {
 }
 impl VertexAttrDesc {
     pub const fn new() -> Self {
-        Self {
-            buffer_index: 0,
-            offset: 0,
-            format: VertexFormat::new(),
-        }
+        Self { buffer_index: 0, offset: 0, format: VertexFormat::new() }
     }
 }
 impl Default for VertexAttrDesc {
@@ -1313,10 +1266,7 @@ pub struct LayoutDesc {
 }
 impl LayoutDesc {
     pub const fn new() -> Self {
-        Self {
-            buffers: [BufferLayoutDesc::new(); 8],
-            attrs: [VertexAttrDesc::new(); 16],
-        }
+        Self { buffers: [BufferLayoutDesc::new(); 8], attrs: [VertexAttrDesc::new(); 16] }
     }
 }
 impl Default for LayoutDesc {
@@ -1507,11 +1457,7 @@ pub struct PassAttachmentDesc {
 }
 impl PassAttachmentDesc {
     pub const fn new() -> Self {
-        Self {
-            image: Image::new(),
-            mip_level: 0,
-            slice: 0,
-        }
+        Self { image: Image::new(), mip_level: 0, slice: 0 }
     }
 }
 impl Default for PassAttachmentDesc {
@@ -1562,15 +1508,13 @@ pub struct TraceHooks {
     pub update_buffer: Option<extern "C" fn(Buffer, *const Range, *mut core::ffi::c_void)>,
     pub update_image: Option<extern "C" fn(Image, *const ImageData, *mut core::ffi::c_void)>,
     pub append_buffer: Option<extern "C" fn(Buffer, *const Range, i32, *mut core::ffi::c_void)>,
-    pub begin_default_pass:
-        Option<extern "C" fn(*const PassAction, i32, i32, *mut core::ffi::c_void)>,
+    pub begin_default_pass: Option<extern "C" fn(*const PassAction, i32, i32, *mut core::ffi::c_void)>,
     pub begin_pass: Option<extern "C" fn(Pass, *const PassAction, *mut core::ffi::c_void)>,
     pub apply_viewport: Option<extern "C" fn(i32, i32, i32, i32, bool, *mut core::ffi::c_void)>,
     pub apply_scissor_rect: Option<extern "C" fn(i32, i32, i32, i32, bool, *mut core::ffi::c_void)>,
     pub apply_pipeline: Option<extern "C" fn(Pipeline, *mut core::ffi::c_void)>,
     pub apply_bindings: Option<extern "C" fn(*const Bindings, *mut core::ffi::c_void)>,
-    pub apply_uniforms:
-        Option<extern "C" fn(ShaderStage, i32, *const Range, *mut core::ffi::c_void)>,
+    pub apply_uniforms: Option<extern "C" fn(ShaderStage, i32, *const Range, *mut core::ffi::c_void)>,
     pub draw: Option<extern "C" fn(i32, i32, i32, *mut core::ffi::c_void)>,
     pub end_pass: Option<extern "C" fn(*mut core::ffi::c_void)>,
     pub commit: Option<extern "C" fn(*mut core::ffi::c_void)>,
@@ -1692,11 +1636,7 @@ pub struct SlotInfo {
 }
 impl SlotInfo {
     pub const fn new() -> Self {
-        Self {
-            state: ResourceState::new(),
-            res_id: 0,
-            ctx_id: 0,
-        }
+        Self { state: ResourceState::new(), res_id: 0, ctx_id: 0 }
     }
 }
 impl Default for SlotInfo {
@@ -1743,12 +1683,7 @@ pub struct ImageInfo {
 }
 impl ImageInfo {
     pub const fn new() -> Self {
-        Self {
-            slot: SlotInfo::new(),
-            upd_frame_index: 0,
-            num_slots: 0,
-            active_slot: 0,
-        }
+        Self { slot: SlotInfo::new(), upd_frame_index: 0, num_slots: 0, active_slot: 0 }
     }
 }
 impl Default for ImageInfo {
@@ -1763,9 +1698,7 @@ pub struct ShaderInfo {
 }
 impl ShaderInfo {
     pub const fn new() -> Self {
-        Self {
-            slot: SlotInfo::new(),
-        }
+        Self { slot: SlotInfo::new() }
     }
 }
 impl Default for ShaderInfo {
@@ -1780,9 +1713,7 @@ pub struct PipelineInfo {
 }
 impl PipelineInfo {
     pub const fn new() -> Self {
-        Self {
-            slot: SlotInfo::new(),
-        }
+        Self { slot: SlotInfo::new() }
     }
 }
 impl Default for PipelineInfo {
@@ -1797,9 +1728,7 @@ pub struct PassInfo {
 }
 impl PassInfo {
     pub const fn new() -> Self {
-        Self {
-            slot: SlotInfo::new(),
-        }
+        Self { slot: SlotInfo::new() }
     }
 }
 impl Default for PassInfo {
@@ -2022,8 +1951,7 @@ pub struct MetalContextDesc {
     pub renderpass_descriptor_userdata_cb:
         Option<extern "C" fn(*mut core::ffi::c_void) -> *const core::ffi::c_void>,
     pub drawable_cb: Option<extern "C" fn() -> *const core::ffi::c_void>,
-    pub drawable_userdata_cb:
-        Option<extern "C" fn(*mut core::ffi::c_void) -> *const core::ffi::c_void>,
+    pub drawable_userdata_cb: Option<extern "C" fn(*mut core::ffi::c_void) -> *const core::ffi::c_void>,
     pub user_data: *mut core::ffi::c_void,
 }
 impl MetalContextDesc {
@@ -2079,11 +2007,9 @@ impl Default for D3d11ContextDesc {
 pub struct WgpuContextDesc {
     pub device: *const core::ffi::c_void,
     pub render_view_cb: Option<extern "C" fn() -> *const core::ffi::c_void>,
-    pub render_view_userdata_cb:
-        Option<extern "C" fn(*mut core::ffi::c_void) -> *const core::ffi::c_void>,
+    pub render_view_userdata_cb: Option<extern "C" fn(*mut core::ffi::c_void) -> *const core::ffi::c_void>,
     pub resolve_view_cb: Option<extern "C" fn() -> *const core::ffi::c_void>,
-    pub resolve_view_userdata_cb:
-        Option<extern "C" fn(*mut core::ffi::c_void) -> *const core::ffi::c_void>,
+    pub resolve_view_userdata_cb: Option<extern "C" fn(*mut core::ffi::c_void) -> *const core::ffi::c_void>,
     pub depth_stencil_view_cb: Option<extern "C" fn() -> *const core::ffi::c_void>,
     pub depth_stencil_view_userdata_cb:
         Option<extern "C" fn(*mut core::ffi::c_void) -> *const core::ffi::c_void>,
@@ -2145,10 +2071,7 @@ pub struct CommitListener {
 }
 impl CommitListener {
     pub const fn new() -> Self {
-        Self {
-            func: None,
-            user_data: core::ptr::null_mut(),
-        }
+        Self { func: None, user_data: core::ptr::null_mut() }
     }
 }
 impl Default for CommitListener {
@@ -2165,11 +2088,7 @@ pub struct Allocator {
 }
 impl Allocator {
     pub const fn new() -> Self {
-        Self {
-            alloc: None,
-            free: None,
-            user_data: core::ptr::null_mut(),
-        }
+        Self { alloc: None, free: None, user_data: core::ptr::null_mut() }
     }
 }
 impl Default for Allocator {
@@ -2195,10 +2114,7 @@ pub struct Logger {
 }
 impl Logger {
     pub const fn new() -> Self {
-        Self {
-            func: None,
-            user_data: core::ptr::null_mut(),
-        }
+        Self { func: None, user_data: core::ptr::null_mut() }
     }
 }
 impl Default for Logger {
@@ -2286,20 +2202,8 @@ pub mod ffi {
         pub fn sg_begin_pass(pass: Pass, pass_action: *const PassAction);
         pub fn sg_apply_viewport(x: i32, y: i32, width: i32, height: i32, origin_top_left: bool);
         pub fn sg_apply_viewportf(x: f32, y: f32, width: f32, height: f32, origin_top_left: bool);
-        pub fn sg_apply_scissor_rect(
-            x: i32,
-            y: i32,
-            width: i32,
-            height: i32,
-            origin_top_left: bool,
-        );
-        pub fn sg_apply_scissor_rectf(
-            x: f32,
-            y: f32,
-            width: f32,
-            height: f32,
-            origin_top_left: bool,
-        );
+        pub fn sg_apply_scissor_rect(x: i32, y: i32, width: i32, height: i32, origin_top_left: bool);
+        pub fn sg_apply_scissor_rectf(x: f32, y: f32, width: f32, height: f32, origin_top_left: bool);
         pub fn sg_apply_pipeline(pip: Pipeline);
         pub fn sg_apply_bindings(bindings: *const Bindings);
         pub fn sg_apply_uniforms(stage: ShaderStage, ub_index: usize, data: *const Range);

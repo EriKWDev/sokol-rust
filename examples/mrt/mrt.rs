@@ -13,8 +13,7 @@ mod math;
 mod shader;
 
 use math as m;
-use sokol::app as sapp;
-use sokol::gfx as sg;
+use sokol::{app as sapp, gfx as sg};
 
 const OFFSCREEN_SAMPLE_COUNT: usize = 4;
 
@@ -58,17 +57,9 @@ static mut STATE: State = State {
         pip: sg::Pipeline::new(),
         bind: sg::Bindings::new(),
     },
-    fsq: Fsq {
-        pip: sg::Pipeline::new(),
-        bind: sg::Bindings::new(),
-    },
-    dbg: Dbg {
-        pip: sg::Pipeline::new(),
-        bind: sg::Bindings::new(),
-    },
-    dflt: Dflt {
-        pass_action: sg::PassAction::new(),
-    },
+    fsq: Fsq { pip: sg::Pipeline::new(), bind: sg::Bindings::new() },
+    dbg: Dbg { pip: sg::Pipeline::new(), bind: sg::Bindings::new() },
+    dflt: Dflt { pass_action: sg::PassAction::new() },
     rx: 0.0,
     ry: 0.0,
     view: [[0.0; 4]; 4],
@@ -77,62 +68,34 @@ static mut STATE: State = State {
 extern "C" fn init() {
     let state = unsafe { &mut STATE };
 
-    state.view = m::lookat_mat4(
-        m::vec3(0.0, 1.5, 6.0),
-        m::Vec3::ZERO,
-        m::vec3(0.0, 1.0, 0.0),
-    );
+    state.view = m::lookat_mat4(m::vec3(0.0, 1.5, 6.0), m::Vec3::ZERO, m::vec3(0.0, 1.0, 0.0));
 
     sg::setup(&sg::Desc {
         context: sokol::glue::context(),
-        logger: sg::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
+        logger: sg::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
         ..Default::default()
     });
 
     // setup pass action for default render pass
-    state.dflt.pass_action.colors[0] = sg::ColorAttachmentAction {
-        action: sg::Action::Dontcare,
-        ..Default::default()
-    };
-    state.dflt.pass_action.depth = sg::DepthAttachmentAction {
-        action: sg::Action::Dontcare,
-        ..Default::default()
-    };
-    state.dflt.pass_action.stencil = sg::StencilAttachmentAction {
-        action: sg::Action::Dontcare,
-        ..Default::default()
-    };
+    state.dflt.pass_action.colors[0] =
+        sg::ColorAttachmentAction { action: sg::Action::Dontcare, ..Default::default() };
+    state.dflt.pass_action.depth =
+        sg::DepthAttachmentAction { action: sg::Action::Dontcare, ..Default::default() };
+    state.dflt.pass_action.stencil =
+        sg::StencilAttachmentAction { action: sg::Action::Dontcare, ..Default::default() };
 
     // set pass action for offscreen render pass
     state.offscreen.pass_action.colors[0] = sg::ColorAttachmentAction {
         action: sg::Action::Clear,
-        value: sg::Color {
-            r: 0.25,
-            g: 0.0,
-            b: 0.0,
-            a: 1.0,
-        },
+        value: sg::Color { r: 0.25, g: 0.0, b: 0.0, a: 1.0 },
     };
     state.offscreen.pass_action.colors[1] = sg::ColorAttachmentAction {
         action: sg::Action::Clear,
-        value: sg::Color {
-            r: 0.0,
-            g: 0.25,
-            b: 0.0,
-            a: 1.0,
-        },
+        value: sg::Color { r: 0.0, g: 0.25, b: 0.0, a: 1.0 },
     };
     state.offscreen.pass_action.colors[2] = sg::ColorAttachmentAction {
         action: sg::Action::Clear,
-        value: sg::Color {
-            r: 0.0,
-            g: 0.0,
-            b: 0.25,
-            a: 1.0,
-        },
+        value: sg::Color { r: 0.0, g: 0.0, b: 0.25, a: 1.0 },
     };
 
     // setup the offscreen render pass and render target images,
@@ -174,10 +137,8 @@ extern "C" fn init() {
     ];
 
     // create vertex buffer for a cube
-    let cube_vbuf = sg::make_buffer(&sg::BufferDesc {
-        data: sg::slice_as_range(VERTICES),
-        ..Default::default()
-    });
+    let cube_vbuf =
+        sg::make_buffer(&sg::BufferDesc { data: sg::slice_as_range(VERTICES), ..Default::default() });
 
     #[rustfmt::skip]
     const INDICES: &[u16] = &[
@@ -215,18 +176,14 @@ extern "C" fn init() {
         color_count: 3,
         ..Default::default()
     };
-    offscreen_pip_desc.layout.attrs[shader::ATTR_VS_OFFSCREEN_POS].format =
-        sg::VertexFormat::Float3;
-    offscreen_pip_desc.layout.attrs[shader::ATTR_VS_OFFSCREEN_BRIGHT0].format =
-        sg::VertexFormat::Float;
+    offscreen_pip_desc.layout.attrs[shader::ATTR_VS_OFFSCREEN_POS].format = sg::VertexFormat::Float3;
+    offscreen_pip_desc.layout.attrs[shader::ATTR_VS_OFFSCREEN_BRIGHT0].format = sg::VertexFormat::Float;
     state.offscreen.pip = sg::make_pipeline(&offscreen_pip_desc);
 
     const QUAD_VERTICES: &[f32] = &[0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0];
     // a vertex buffer to render a fullscreen quad
-    let quad_vbuf = sg::make_buffer(&sg::BufferDesc {
-        data: sg::slice_as_range(QUAD_VERTICES),
-        ..Default::default()
-    });
+    let quad_vbuf =
+        sg::make_buffer(&sg::BufferDesc { data: sg::slice_as_range(QUAD_VERTICES), ..Default::default() });
 
     // shader and pipeline object to render a fullscreen quad which composes
     // the 3 offscreen render targets into the default framebuffer
@@ -267,14 +224,9 @@ extern "C" fn frame() {
     state.ry += 2.0 * dt;
 
     // compute shader uniform data
-    let offscreen_params = shader::OffscreenParams {
-        mvp: compute_mvp(state.rx, state.ry),
-    };
+    let offscreen_params = shader::OffscreenParams { mvp: compute_mvp(state.rx, state.ry) };
     let fsq_params = shader::FsqParams {
-        offset: m::vec2(
-            f32::sin(state.rx * 0.01) * 0.1,
-            f32::cos(state.ry * 0.01) * 0.1,
-        ),
+        offset: m::vec2(f32::sin(state.rx * 0.01) * 0.1, f32::cos(state.ry * 0.01) * 0.1),
         _pad_8: [0; 8],
     };
 
@@ -295,11 +247,7 @@ extern "C" fn frame() {
     sg::begin_default_pass(&state.dflt.pass_action, sapp::width(), sapp::height());
     sg::apply_pipeline(state.fsq.pip);
     sg::apply_bindings(&state.fsq.bind);
-    sg::apply_uniforms(
-        sg::ShaderStage::Vs,
-        shader::SLOT_FSQ_PARAMS,
-        &sg::value_as_range(&fsq_params),
-    );
+    sg::apply_uniforms(sg::ShaderStage::Vs, shader::SLOT_FSQ_PARAMS, &sg::value_as_range(&fsq_params));
     sg::draw(0, 4, 1);
     sg::apply_pipeline(state.dbg.pip);
     for i in 0..=2 {
@@ -387,14 +335,8 @@ fn main() {
         height: 600,
         sample_count: 4,
         window_title,
-        logger: sapp::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
-        icon: sapp::IconDesc {
-            sokol_default: true,
-            ..Default::default()
-        },
+        logger: sapp::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
+        icon: sapp::IconDesc { sokol_default: true, ..Default::default() },
 
         ..Default::default()
     });

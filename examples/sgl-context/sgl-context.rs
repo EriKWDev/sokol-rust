@@ -5,10 +5,7 @@
 //  using sokol/gl contexts.
 //------------------------------------------------------------------------------
 
-use sokol::app as sapp;
-use sokol::gfx as sg;
-use sokol::gl as sgl;
-use sokol::glue as sglue;
+use sokol::{app as sapp, gfx as sg, gl as sgl, glue as sglue};
 
 const OFFSCREEN_PIXELFORMAT: sg::PixelFormat = sg::PixelFormat::Rgba8;
 const OFFSCREEN_SAMPLECOUNT: i32 = 1;
@@ -39,10 +36,7 @@ static mut STATE: State = State {
         img: sg::Image::new(),
         sgl_context: sgl::Context::new(),
     },
-    display: Display {
-        pass_action: sg::PassAction::new(),
-        sgl_pip: sgl::Pipeline::new(),
-    },
+    display: Display { pass_action: sg::PassAction::new(), sgl_pip: sgl::Pipeline::new() },
 };
 
 extern "C" fn init() {
@@ -50,44 +44,30 @@ extern "C" fn init() {
 
     sg::setup(&sg::Desc {
         context: sglue::context(),
-        logger: sg::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
+        logger: sg::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
         ..Default::default()
     });
 
     sgl::setup(&sgl::Desc {
         max_vertices: 64,
         max_commands: 16,
-        logger: sgl::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
+        logger: sgl::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
         ..Default::default()
     });
 
     state.display.pass_action.colors[0] = sg::ColorAttachmentAction {
         action: sg::Action::Clear,
-        value: sg::Color {
-            r: 0.5,
-            g: 0.7,
-            b: 1.0,
-            a: 1.0,
-        },
+        value: sg::Color { r: 0.5, g: 0.7, b: 1.0, a: 1.0 },
     };
-    state.display.sgl_pip = sgl::context_make_pipeline(
-        sgl::default_context(),
-        &sg::PipelineDesc {
-            cull_mode: sg::CullMode::Back,
-            depth: sg::DepthState {
-                write_enabled: true,
-                compare: sg::CompareFunc::LessEqual,
-                ..Default::default()
-            },
+    state.display.sgl_pip = sgl::context_make_pipeline(sgl::default_context(), &sg::PipelineDesc {
+        cull_mode: sg::CullMode::Back,
+        depth: sg::DepthState {
+            write_enabled: true,
+            compare: sg::CompareFunc::LessEqual,
             ..Default::default()
         },
-    );
+        ..Default::default()
+    });
 
     // create a sokol-gl context compatible with the offscreen render pass
     // (specific color pixel format, no depth-stencil-surface, no MSAA)
@@ -114,19 +94,12 @@ extern "C" fn init() {
         ..Default::default()
     });
     let mut pass_desc = sg::PassDesc::new();
-    pass_desc.color_attachments[0] = sg::PassAttachmentDesc {
-        image: state.offscreen.img,
-        ..Default::default()
-    };
+    pass_desc.color_attachments[0] =
+        sg::PassAttachmentDesc { image: state.offscreen.img, ..Default::default() };
     state.offscreen.pass = sg::make_pass(&pass_desc);
     state.offscreen.pass_action.colors[0] = sg::ColorAttachmentAction {
         action: sg::Action::Clear,
-        value: sg::Color {
-            r: 0.0,
-            g: 0.0,
-            b: 0.0,
-            a: 1.0,
-        },
+        value: sg::Color { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
     };
 }
 
@@ -150,12 +123,7 @@ extern "C" fn frame() {
     sgl::texture(state.offscreen.img);
     sgl::load_pipeline(state.display.sgl_pip);
     sgl::matrix_mode_projection();
-    sgl::perspective(
-        f32::to_radians(45.0),
-        sapp::widthf() / sapp::heightf(),
-        0.1,
-        100.0,
-    );
+    sgl::perspective(f32::to_radians(45.0), sapp::widthf() / sapp::heightf(), 0.1, 100.0);
     let eye = [f32::sin(a) * 6.0, f32::sin(a) * 3.0, f32::cos(a) * 6.0];
     sgl::matrix_mode_modelview();
     sgl::lookat(eye[0], eye[1], eye[2], 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
@@ -229,14 +197,8 @@ fn main() {
         height: 600,
         sample_count: 4,
         window_title,
-        logger: sapp::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
-        icon: sapp::IconDesc {
-            sokol_default: true,
-            ..Default::default()
-        },
+        logger: sapp::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
+        icon: sapp::IconDesc { sokol_default: true, ..Default::default() },
         ..Default::default()
     })
 }

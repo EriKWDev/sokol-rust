@@ -4,16 +4,13 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
-use crate::app as sapp;
-use crate::gfx as sg;
+use crate::{app as sapp, gfx as sg};
 
 /// Helper function to convert a C string to a rust string slice
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str
-        .to_str()
-        .expect("c_char_ptr contained invalid Utf8 Data")
+    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
 }
 
 #[repr(C)]
@@ -25,11 +22,7 @@ pub struct Allocator {
 }
 impl Allocator {
     pub const fn new() -> Self {
-        Self {
-            alloc: None,
-            free: None,
-            user_data: core::ptr::null_mut(),
-        }
+        Self { alloc: None, free: None, user_data: core::ptr::null_mut() }
     }
 }
 impl Default for Allocator {
@@ -84,12 +77,7 @@ pub struct FrameDesc {
 }
 impl FrameDesc {
     pub const fn new() -> Self {
-        Self {
-            width: 0,
-            height: 0,
-            delta_time: 0.0,
-            dpi_scale: 0.0,
-        }
+        Self { width: 0, height: 0, delta_time: 0.0, dpi_scale: 0.0 }
     }
 }
 impl Default for FrameDesc {

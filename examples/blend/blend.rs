@@ -8,9 +8,7 @@ mod math;
 mod shader;
 
 use math as m;
-use sokol::app as sapp;
-use sokol::gfx as sg;
-use sokol::glue as sglue;
+use sokol::{app as sapp, gfx as sg, glue as sglue};
 
 const NUM_BLEND_FACTORS: usize = 15;
 
@@ -31,10 +29,7 @@ static mut STATE: State = State {
     bg_pip: sg::Pipeline::new(),
     r: 0.0,
     quad_vs_params: shader::QuadVsParams { mvp: [[0.0; 4]; 4] },
-    bg_fs_params: shader::BgFsParams {
-        tick: 0.0,
-        _pad_4: [0; 12],
-    },
+    bg_fs_params: shader::BgFsParams { tick: 0.0, _pad_4: [0; 12] },
 };
 
 extern "C" fn init() {
@@ -43,10 +38,7 @@ extern "C" fn init() {
     sg::setup(&sg::Desc {
         pipeline_pool_size: (NUM_BLEND_FACTORS * NUM_BLEND_FACTORS + 1) as _,
         context: sglue::context(),
-        logger: sg::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
+        logger: sg::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
         ..Default::default()
     });
 
@@ -64,10 +56,8 @@ extern "C" fn init() {
         -1.0,  1.0, 0.0,  0.0, 0.0, 1.0, 0.5,
          1.0,  1.0, 0.0,  1.0, 1.0, 0.0, 0.5,
     ];
-    state.bind.vertex_buffers[0] = sg::make_buffer(&sg::BufferDesc {
-        data: sg::slice_as_range(VERTICES),
-        ..Default::default()
-    });
+    state.bind.vertex_buffers[0] =
+        sg::make_buffer(&sg::BufferDesc { data: sg::slice_as_range(VERTICES), ..Default::default() });
 
     // shader and pipeline object for rendering the background quad
     state.bg_pip = sg::make_pipeline(&sg::PipelineDesc {
@@ -98,12 +88,7 @@ extern "C" fn init() {
         },
         shader: quad_shd,
         primitive_type: sg::PrimitiveType::TriangleStrip,
-        blend_color: sg::Color {
-            r: 1.0,
-            g: 0.0,
-            b: 0.0,
-            a: 1.0,
-        },
+        blend_color: sg::Color { r: 1.0, g: 0.0, b: 0.0, a: 1.0 },
         ..Default::default()
     };
     for src in 0..NUM_BLEND_FACTORS {
@@ -186,14 +171,8 @@ fn main() {
         height: 600,
         sample_count: 4,
         window_title,
-        logger: sapp::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
-        icon: sapp::IconDesc {
-            sokol_default: true,
-            ..Default::default()
-        },
+        logger: sapp::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
+        icon: sapp::IconDesc { sokol_default: true, ..Default::default() },
         ..Default::default()
     });
 }

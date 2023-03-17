@@ -4,10 +4,7 @@
 //  Text rendering with sokol_debugtext.h, test builtin fonts.
 //------------------------------------------------------------------------------
 
-use sokol::app as sapp;
-use sokol::debugtext as sdtx;
-use sokol::gfx as sg;
-use sokol::glue as sglue;
+use sokol::{app as sapp, debugtext as sdtx, gfx as sg, glue as sglue};
 
 const FONT_KC853: usize = 0;
 const FONT_KC854: usize = 1;
@@ -20,28 +17,18 @@ struct State {
     pass_action: sg::PassAction,
 }
 
-static mut STATE: State = State {
-    pass_action: sg::PassAction::new(),
-};
+static mut STATE: State = State { pass_action: sg::PassAction::new() };
 
 extern "C" fn init() {
     let state = unsafe { &mut STATE };
     state.pass_action.colors[0] = sg::ColorAttachmentAction {
         action: sg::Action::Clear,
-        value: sg::Color {
-            r: 0.0,
-            g: 0.125,
-            b: 0.25,
-            a: 1.0,
-        },
+        value: sg::Color { r: 0.0, g: 0.125, b: 0.25, a: 1.0 },
     };
 
     sg::setup(&sg::Desc {
         context: sglue::context(),
-        logger: sg::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
+        logger: sg::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
         ..Default::default()
     });
 
@@ -106,14 +93,8 @@ fn main() {
         width: 1024,
         height: 600,
         window_title,
-        logger: sapp::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
-        icon: sapp::IconDesc {
-            sokol_default: true,
-            ..Default::default()
-        },
+        logger: sapp::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
+        icon: sapp::IconDesc { sokol_default: true, ..Default::default() },
         ..Default::default()
     })
 }

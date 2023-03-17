@@ -7,9 +7,7 @@
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str
-        .to_str()
-        .expect("c_char_ptr contained invalid Utf8 Data")
+    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -80,10 +78,7 @@ pub struct Logger {
 }
 impl Logger {
     pub const fn new() -> Self {
-        Self {
-            func: None,
-            user_data: core::ptr::null_mut(),
-        }
+        Self { func: None, user_data: core::ptr::null_mut() }
     }
 }
 impl Default for Logger {
@@ -100,11 +95,7 @@ pub struct Allocator {
 }
 impl Allocator {
     pub const fn new() -> Self {
-        Self {
-            alloc: None,
-            free: None,
-            user_data: core::ptr::null_mut(),
-        }
+        Self { alloc: None, free: None, user_data: core::ptr::null_mut() }
     }
 }
 impl Default for Allocator {

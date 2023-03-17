@@ -9,24 +9,16 @@ use crate::gfx as sg;
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str
-        .to_str()
-        .expect("c_char_ptr contained invalid Utf8 Data")
+    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
 }
 
 /// Helper function to cast a rust slice into a sokol Range
 pub fn slice_as_range<T>(data: &[T]) -> Range {
-    Range {
-        size: data.len() * std::mem::size_of::<T>(),
-        ptr: data.as_ptr() as *const _,
-    }
+    Range { size: data.len() * std::mem::size_of::<T>(), ptr: data.as_ptr() as *const _ }
 }
 /// Helper function to cast a rust reference into a sokol Range
 pub fn value_as_range<T>(value: &T) -> Range {
-    Range {
-        size: std::mem::size_of::<T>(),
-        ptr: value as *const T as *const _,
-    }
+    Range { size: std::mem::size_of::<T>(), ptr: value as *const T as *const _ }
 }
 
 impl<T> From<&[T]> for Range {
@@ -50,10 +42,7 @@ pub struct Range {
 }
 impl Range {
     pub const fn new() -> Self {
-        Self {
-            ptr: core::ptr::null(),
-            size: 0,
-        }
+        Self { ptr: core::ptr::null(), size: 0 }
     }
 }
 impl Default for Range {
@@ -89,15 +78,7 @@ pub struct Vertex {
 }
 impl Vertex {
     pub const fn new() -> Self {
-        Self {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0,
-            normal: 0,
-            u: 0,
-            v: 0,
-            color: 0,
-        }
+        Self { x: 0.0, y: 0.0, z: 0.0, normal: 0, u: 0, v: 0, color: 0 }
     }
 }
 impl Default for Vertex {
@@ -113,10 +94,7 @@ pub struct ElementRange {
 }
 impl ElementRange {
     pub const fn new() -> Self {
-        Self {
-            base_element: 0,
-            num_elements: 0,
-        }
+        Self { base_element: 0, num_elements: 0 }
     }
 }
 impl Default for ElementRange {
@@ -148,10 +126,7 @@ pub struct Sizes {
 }
 impl Sizes {
     pub const fn new() -> Self {
-        Self {
-            vertices: SizesItem::new(),
-            indices: SizesItem::new(),
-        }
+        Self { vertices: SizesItem::new(), indices: SizesItem::new() }
     }
 }
 impl Default for Sizes {
@@ -168,11 +143,7 @@ pub struct BufferItem {
 }
 impl BufferItem {
     pub const fn new() -> Self {
-        Self {
-            buffer: Range::new(),
-            data_size: 0,
-            shape_offset: 0,
-        }
+        Self { buffer: Range::new(), data_size: 0, shape_offset: 0 }
     }
 }
 impl Default for BufferItem {
@@ -189,11 +160,7 @@ pub struct Buffer {
 }
 impl Buffer {
     pub const fn new() -> Self {
-        Self {
-            valid: false,
-            vertices: BufferItem::new(),
-            indices: BufferItem::new(),
-        }
+        Self { valid: false, vertices: BufferItem::new(), indices: BufferItem::new() }
     }
 }
 impl Default for Buffer {

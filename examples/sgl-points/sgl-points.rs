@@ -4,10 +4,7 @@
 //  Test point rendering with sokol/gl
 //------------------------------------------------------------------------------
 
-use sokol::app as sapp;
-use sokol::gfx as sg;
-use sokol::gl as sgl;
-use sokol::glue as sglue;
+use sokol::{app as sapp, gfx as sg, gl as sgl, glue as sglue};
 
 #[rustfmt::skip]
 const PALETTE: [[f32; 3]; 16] = [
@@ -32,18 +29,12 @@ const PALETTE: [[f32; 3]; 16] = [
 extern "C" fn init() {
     sg::setup(&sg::Desc {
         context: sglue::context(),
-        logger: sg::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
+        logger: sg::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
         ..Default::default()
     });
 
     sgl::setup(&sgl::Desc {
-        logger: sgl::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
+        logger: sgl::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
         ..Default::default()
     });
 }
@@ -64,11 +55,7 @@ fn compute_color(t: f32) -> [f32; 3] {
         }};
     }
 
-    [
-        lerp!(c0[0], c1[0], l),
-        lerp!(c0[1], c1[1], l),
-        lerp!(c0[2], c1[2], l),
-    ]
+    [lerp!(c0[0], c1[0], l), lerp!(c0[1], c1[1], l), lerp!(c0[2], c1[2], l)]
 }
 
 extern "C" fn frame() {
@@ -96,12 +83,7 @@ extern "C" fn frame() {
     let mut pass_action = sg::PassAction::new();
     pass_action.colors[0] = sg::ColorAttachmentAction {
         action: sg::Action::Clear,
-        value: sg::Color {
-            r: 0.0,
-            g: 0.0,
-            b: 0.0,
-            a: 1.0,
-        },
+        value: sg::Color { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
     };
     sg::begin_default_pass(&pass_action, sapp::width(), sapp::height());
     sgl::draw();
@@ -125,14 +107,8 @@ fn main() {
         height: 512,
         sample_count: 4,
         window_title,
-        logger: sapp::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
-        icon: sapp::IconDesc {
-            sokol_default: true,
-            ..Default::default()
-        },
+        logger: sapp::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
+        icon: sapp::IconDesc { sokol_default: true, ..Default::default() },
         ..Default::default()
     })
 }

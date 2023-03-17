@@ -7,9 +7,7 @@
 #[inline]
 fn c_char_ptr_to_rust_str(c_char_ptr: *const core::ffi::c_char) -> &'static str {
     let c_str = unsafe { core::ffi::CStr::from_ptr(c_char_ptr) };
-    c_str
-        .to_str()
-        .expect("c_char_ptr contained invalid Utf8 Data")
+    c_str.to_str().expect("c_char_ptr contained invalid Utf8 Data")
 }
 
 pub mod ffi {
@@ -37,9 +35,5 @@ pub extern "C" fn slog_func(
     filename: *const core::ffi::c_char,
     user_data: *mut core::ffi::c_void,
 ) {
-    unsafe {
-        ffi::slog_func(
-            tag, log_level, log_item, message, line_nr, filename, user_data,
-        )
-    }
+    unsafe { ffi::slog_func(tag, log_level, log_item, message, line_nr, filename, user_data) }
 }

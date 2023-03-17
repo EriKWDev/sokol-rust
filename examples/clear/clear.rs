@@ -1,34 +1,23 @@
-use sokol::app as sapp;
-use sokol::gfx as sg;
+use sokol::{app as sapp, gfx as sg};
 
 struct State {
     pass_action: sg::PassAction,
 }
 
-static mut STATE: State = State {
-    pass_action: sg::PassAction::new(),
-};
+static mut STATE: State = State { pass_action: sg::PassAction::new() };
 
 extern "C" fn init() {
     let state = unsafe { &mut STATE };
 
     sg::setup(&sg::Desc {
         context: sokol::glue::context(),
-        logger: sg::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
+        logger: sg::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
         ..Default::default()
     });
 
     state.pass_action.colors[0] = sg::ColorAttachmentAction {
         action: sg::Action::Clear,
-        value: sg::Color {
-            r: 1.0,
-            g: 0.0,
-            b: 0.0,
-            a: 1.0,
-        },
+        value: sg::Color { r: 1.0, g: 0.0, b: 0.0, a: 1.0 },
         ..Default::default()
     };
 
@@ -37,24 +26,24 @@ extern "C" fn init() {
         sg::Backend::Glcore33 | sg::Backend::Gles2 | sg::Backend::Gles3 => {
             println!("Using GL Backend!");
             println!("Specifically the {:?} backend!", backend);
-        }
+        },
 
         sg::Backend::D3d11 => {
             println!("Using D3d11 Backend!");
-        }
+        },
 
         sg::Backend::MetalIos | sg::Backend::MetalMacos | sg::Backend::MetalSimulator => {
             println!("Using Metal Backend!");
             println!("Specifically the {:?} backend!", backend);
-        }
+        },
 
         sg::Backend::Wgpu => {
             println!("Using Wgpu Backend!");
-        }
+        },
 
         sg::Backend::Dummy => {
             println!("Using Dummy Backend!");
-        }
+        },
     }
 }
 
@@ -86,14 +75,8 @@ fn main() {
         width: 800,
         height: 600,
         sample_count: 4,
-        logger: sapp::Logger {
-            func: Some(sokol::log::slog_func),
-            ..Default::default()
-        },
-        icon: sapp::IconDesc {
-            sokol_default: true,
-            ..Default::default()
-        },
+        logger: sapp::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
+        icon: sapp::IconDesc { sokol_default: true, ..Default::default() },
         ..Default::default()
     });
 }
