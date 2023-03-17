@@ -7,10 +7,7 @@ mod math;
 mod shader;
 
 use math as m;
-use sokol::app as sapp;
-use sokol::gfx as sg;
-use sokol::glue as sglue;
-use sokol::log as slog;
+use sokol::{app as sapp, gfx as sg, glue as sglue, log as slog};
 
 struct State {
     pub pass_action: sg::PassAction,
