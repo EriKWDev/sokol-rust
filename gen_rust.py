@@ -97,7 +97,7 @@ overrides = {
 prim_types = {
     "int": "i32",
     "bool": "bool",
-    "char": "u8",
+    "char": "core::ffi::c_char",
     "int8_t": "i8",
     "uint8_t": "u8",
     "int16_t": "i16",
@@ -129,7 +129,7 @@ prim_defaults = {
     "uintptr_t": "0",
     "intptr_t": "0",
     "size_t": "0",
-    "char": "'\0'",
+    "char": "0",
 }
 
 special_constant_types = {
@@ -252,6 +252,13 @@ def is_const_struct_ptr(s):
     return False
 
 
+def is_struct_ptr(s):
+    for struct_type in struct_types:
+        if s == f"{struct_type} *":
+            return True
+    return False
+
+
 def type_default_value(s):
     return prim_defaults[s]
 
@@ -276,12 +283,14 @@ def as_c_arg_type(arg_prefix, arg_type, prefix):
         return pre + "*const core::ffi::c_char"
     elif is_const_struct_ptr(arg_type):
         return pre + f"*const {as_rust_struct_type(util.extract_ptr_type(arg_type), prefix)}"
+    elif is_struct_ptr(arg_type):
+        return pre + f"*mut {as_rust_struct_type(util.extract_ptr_type(arg_type), prefix)}"
     elif is_prim_ptr(arg_type):
         return pre + f"*mut {as_rust_prim_type(util.extract_ptr_type(arg_type))}"
     elif is_const_prim_ptr(arg_type):
         return pre + f"*const {as_rust_prim_type(util.extract_ptr_type(arg_type))}"
     else:
-        sys.exit(f"ERROR as_rust_arg_type(): {arg_type}")
+        sys.exit(f"ERROR as_c_arg_type(): {arg_type}")
 
 
 def as_rust_arg_type(arg_prefix, arg_type, prefix):
@@ -304,6 +313,8 @@ def as_rust_arg_type(arg_prefix, arg_type, prefix):
         return pre + "&str"
     elif is_const_struct_ptr(arg_type):
         return pre + f"&{as_rust_struct_type(util.extract_ptr_type(arg_type), prefix)}"
+    elif is_struct_ptr(arg_type):
+        return pre + f"&mut {as_rust_struct_type(util.extract_ptr_type(arg_type), prefix)}"
     elif is_prim_ptr(arg_type):
         return pre + f"&mut {as_rust_prim_type(util.extract_ptr_type(arg_type))}"
     elif is_const_prim_ptr(arg_type):
@@ -425,7 +436,6 @@ def gen_struct(decl, prefix):
             default_lines.append(
                 f"{field_name}: {type_default_value(field_type)}"
             )
-
         elif is_struct_type(field_type):
             struct_lines.append(
                 f"pub {field_name}: {as_rust_struct_type(field_type, prefix)}"
@@ -467,6 +477,27 @@ def gen_struct(decl, prefix):
             )
             default_lines.append(
                 f"{field_name}: core::ptr::null()"
+            )
+        elif is_prim_ptr(field_type):
+            struct_lines.append(
+                f"pub {field_name}: *mut {as_rust_prim_type(util.extract_ptr_type(field_type))}"
+            )
+            default_lines.append(
+                f"{field_name}: core::ptr::null_mut()"
+            )
+        elif is_const_struct_ptr(field_type):
+            struct_lines.append(
+                f"pub {field_name}: *const {as_rust_struct_type(util.extract_ptr_type(field_type), prefix)}"
+            )
+            default_lines.append(
+                f"{field_name}: core::ptr::null()"
+            )
+        elif is_struct_ptr(field_type):
+            struct_lines.append(
+                f"pub {field_name}: *mut {as_rust_struct_type(util.extract_ptr_type(field_type), prefix)}"
+            )
+            default_lines.append(
+                f"{field_name}: core::ptr::null_mut()"
             )
         elif util.is_func_ptr(field_type):
             struct_lines.append(
@@ -706,7 +737,6 @@ def pre_parse(inp):
             for item in decl["items"]:
                 enum_items[enum_name].append(as_enum_item_name(item["name"]))
 
-
 def gen_imports(inp, dep_prefixes):
     for dep_prefix in dep_prefixes:
         dep_module_name = module_names[dep_prefix]
@@ -795,7 +825,15 @@ def gen_module(inp, dep_prefixes):
     funcs = []
 
     for decl in inp["decls"]:
-        if not decl["is_dep"]:
+        #
+        #    HACK: gen_ir.py accidentally marks all sg_imgui_ declarations as is_dep since sg_imgui
+        #          depends on sg_a but also starts with sg_... Fix gen_ir.py to remove this hack
+        #
+        dep_hack = False
+        if module == "gfx_imgui":
+            dep_hack = "name" in decl and decl["name"].startswith("sg_imgui_")
+
+        if not decl["is_dep"] or dep_hack:
             kind = decl["kind"]
             if kind == "consts":
                 gen_consts(decl, prefix)

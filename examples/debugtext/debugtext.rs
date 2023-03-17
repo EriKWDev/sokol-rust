@@ -61,7 +61,7 @@ fn print_font(font_index: usize, title: &str, r: u8, g: u8, b: u8) {
     sdtx::puts(title);
 
     for c in 32_i32..=255 {
-        sdtx::putc(c as u8);
+        sdtx::putc(c as _);
         if ((c + 1) & 63) == 0 {
             sdtx::crlf();
         }

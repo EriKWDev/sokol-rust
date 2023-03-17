@@ -263,7 +263,7 @@ pub mod ffi {
         pub fn sdtx_color4b(r: u8, g: u8, b: u8, a: u8);
         pub fn sdtx_color4f(r: f32, g: f32, b: f32, a: f32);
         pub fn sdtx_color1i(rgba: u32);
-        pub fn sdtx_putc(c: u8);
+        pub fn sdtx_putc(c: core::ffi::c_char);
         pub fn sdtx_puts(str: *const core::ffi::c_char);
         pub fn sdtx_putr(str: *const core::ffi::c_char, len: i32);
     }
@@ -405,7 +405,7 @@ pub fn color1i(rgba: u32) {
     unsafe { ffi::sdtx_color1i(rgba) }
 }
 #[inline]
-pub fn putc(c: u8) {
+pub fn putc(c: core::ffi::c_char) {
     unsafe { ffi::sdtx_putc(c) }
 }
 #[inline]
