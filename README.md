@@ -126,15 +126,13 @@ cargo run
 
 ## Shaders
 Sokol's own shader compiler does not yet have support for generating helper files in rust, though they can quite easily
-be translated into rust manually as have been done for the examples. See `examples/mrt/shader.rs` or `examples/cube/shader.rs`
-for examples on how this has been done.
+be translated into rust manually. See `examples/mrt/shader.rs` or `examples/cube/shader.rs` for examples on how this can been done.
 
-I hope to add support for rust into the shader compiler as well.
+I have started a work-in-progress version of the shader compiler can be found in `sokolrust.cc`. I have successfully used it to translate all the shaders that
+are required to run the examples here. If you want to try it out yourself, here is some rough guidelines:
 
-A work-in-progress version of the shader compiler can be found in `sokolrust.cc`. If you place it inside the `src/shdc/` folder
-of the [sokol-tools](https://github.com/floooh/sokol-tools), you just need to make some slight modifications to `main.cc` and re-compile
-the shader-compiler in order to add experimental support for rust shaders as well.
-
+1. Place `sokolrust.cc` inside the `src/shdc/` folder of the [sokol-tools](https://github.com/floooh/sokol-tools)
+2. Make some slight modifications to the code-base:
 ```cpp
 // .. in main.cc switch case, add a case for rust
 case format_t::SOKOL_RUST:
@@ -155,3 +153,6 @@ std::string to_upper_case(const std::string& str) {
 // .. and declare it in shdc.h's namespace util { .. }
 std::string to_upper_case(const std::string& str);
 ```
+3. Re-compile the shader compiler and use it like normal but now with `-f sokol_rust`
+
+I hope to add this frontend to the official compiler soon so that you don't have to apply this patch manually 
