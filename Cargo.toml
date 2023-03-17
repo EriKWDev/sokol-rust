@@ -43,3 +43,7 @@ path = "examples/sgl-points/sgl-points.rs"
 [[example]]
 name = "blend"
 path = "examples/blend/blend.rs"
+
+[[example]]
+name = "audio"
+path = "examples/audio/audio.rs"
