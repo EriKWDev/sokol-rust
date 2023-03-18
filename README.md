@@ -167,3 +167,22 @@ std::string to_upper_case(const std::string& str) {
 3. Re-compile the shader compiler and use it like normal but now with `-f sokol_rust`
 
 I hope to add this frontend to the official compiler soon so that you don't have to apply this patch manually 
+
+## Wasm/Emscripten
+To compile for wasm, you will need the emcc compiler which you can get at https://github.com/emscripten-core/emsdk
+
+You can then compile the examples like such:
+
+```console
+cargo build --target wasm32-unknown-emscripten --example texcube
+```
+
+You will then need to create an html page which imports the game. Checkout `test.html` for how this can be done. It is specifically setup to
+run the texcube example in debug mode.
+
+It can be served with `basic-http-server`:
+```console
+cargo install basic-http-server
+basic-http-server .
+# .. now go to localhost:4000/test.html
+```
