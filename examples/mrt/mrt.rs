@@ -15,7 +15,7 @@ mod shader;
 use math as m;
 use sokol::{app as sapp, gfx as sg};
 
-const OFFSCREEN_SAMPLE_COUNT: usize = 4;
+const OFFSCREEN_SAMPLE_COUNT: usize = 1;
 
 struct Offscreen {
     pub pass_action: sg::PassAction,
@@ -333,7 +333,7 @@ fn main() {
         event_cb: Some(event),
         width: 800,
         height: 600,
-        sample_count: 4,
+        sample_count: 1,
         window_title,
         logger: sapp::Logger { func: Some(sokol::log::slog_func), ..Default::default() },
         icon: sapp::IconDesc { sokol_default: true, ..Default::default() },
